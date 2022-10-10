@@ -28,8 +28,32 @@ We can assign developers to a specific task, and then they can create pull reque
 changes, after that, other developers can review the code written and demand new changes or approve changes.
 Also, we can manage life cycles of a project, we can publish releases, start deployment or start automated tests on
 GitHub.
-On top of that we can connect GitHub to various kind of other software products such as Jira (Issue Tracker) or Slack 
+On top of that we can connect GitHub to various kind of other software products such as Jira (Issue Tracker) or Slack
 (Communication Tool). This way we can wire project development tools each other.
 For example, we can link Jira issues to Git branch and notify new changes on Slack channels.
 
 ### Wikidata
+
+Wikidata is a community-driven knowledge graph run by the Wikimedia Foundation. Foundation of Wikipedia and Wikidata
+are similar, and they often feed each other. However, their structure is really different. Wikipedia
+is an encyclopedia which is human-readable (longer texts). On the other hand, Wikidata is a property value linked data
+graph which is
+more machine-readable.
+
+Wikidata has a unique capabilities like its own query language (SPARQL), immediate language translation, unique object
+linked data structure. All data of Wikidata related to each other. Therefore, we can easily categorize complex research
+subjects. For example,
+let say we would like to know all female mayors around the world. We can simply tie gender and occupation objects
+together and generate results.
+
+Data structure of Wikidata makes it possible to generate language translation too. We can define common grammar rules,
+connectives for each language and generate sentences with the related objects. This way we can publish an object to
+everybody without language restrictions.
+
+Furthermore, all edits and creations open to public, that means everybody can create or edit a Wikidata object. This
+openness does not guarantee that the source of the data is trustworthy. However, since all references linked to the
+objects, users can distinguish trusted authorities by themselves by approving references.
+
+As a result Wikidata is tremendously large linked object graph. We can easily define criteria with plain English and
+query the database. This way we can obtain data with related objects, so that we can research objectively and deeply
+without spending too much time.
