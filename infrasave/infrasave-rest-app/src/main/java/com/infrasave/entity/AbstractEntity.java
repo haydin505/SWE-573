@@ -1,6 +1,7 @@
 package com.infrasave.entity;
 
 import java.time.LocalDateTime;
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,8 +17,10 @@ public abstract class AbstractEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   protected Long id;
 
+  @Column(nullable = false)
   protected LocalDateTime createdAt;
 
+  @Column(nullable = false)
   protected LocalDateTime lastUpdatedAt;
 
   public Long getId() {

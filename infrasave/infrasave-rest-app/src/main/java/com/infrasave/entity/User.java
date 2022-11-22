@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -13,7 +14,14 @@ import javax.persistence.UniqueConstraint;
  * @author huseyinaydin
  */
 @Entity
-@Table(name = "user", uniqueConstraints = {@UniqueConstraint(name = "user_email_uk", columnNames = {"email"})})
+@Table(name = "user",
+       uniqueConstraints = {
+           @UniqueConstraint(name = "user_email_uk", columnNames = {"email"})
+       },
+       indexes = {
+           @Index(name = "user_name_ix", columnList = "name"),
+           @Index(name = "user_surname_ix", columnList = "surname")
+       })
 public class User extends AbstractEntity {
 
   @Column(nullable = false)
@@ -34,6 +42,12 @@ public class User extends AbstractEntity {
   @Column(name = "roles", nullable = false)
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   private List<UserRole> roles;
+
+  @OneToMany(mappedBy = "creatorId")
+  private List<Content> createdContents;
+
+  @OneToMany(mappedBy = "user")
+  private List<MyContent> myContents;
 
   public String getName() {
     return name;
@@ -81,5 +95,21 @@ public class User extends AbstractEntity {
 
   public void setRoles(List<UserRole> roles) {
     this.roles = roles;
+  }
+
+  public List<Content> getCreatedContents() {
+    return createdContents;
+  }
+
+  public void setCreatedContents(List<Content> createdContents) {
+    this.createdContents = createdContents;
+  }
+
+  public List<MyContent> getMyContents() {
+    return myContents;
+  }
+
+  public void setMyContents(List<MyContent> myContents) {
+    this.myContents = myContents;
   }
 }

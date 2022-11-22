@@ -1,4 +1,4 @@
-package com.infrasave.repository;
+package com.infrasave.repository.user;
 
 import com.infrasave.entity.User;
 import java.util.Optional;
