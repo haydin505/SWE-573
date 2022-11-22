@@ -9,6 +9,7 @@ import com.infrasave.enums.VisibilityLevel;
 import com.infrasave.repository.content.ContentRepository;
 import com.infrasave.repository.friend.FriendRepository;
 import com.infrasave.repository.user.UserRepository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,6 +42,10 @@ public class ContentService {
     this.friendRepository = friendRepository;
   }
 
+  private static CustomUserDetails getPrincipal() {
+    return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  }
+
   public List<Content> getContentByUserId(Long userId) {
     Optional<User> userOptional = userRepository.findById(userId);
     User user = userOptional.orElseThrow();
@@ -49,8 +54,7 @@ public class ContentService {
   }
 
   public List<ContentDTO> getMyFeed() {
-    CustomUserDetails principal =
-        (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    CustomUserDetails principal = getPrincipal();
     if (isNull(principal)) {
       return emptyList();
     }
@@ -85,5 +89,56 @@ public class ContentService {
     }).filter(Objects::nonNull).toList();
     List<Content> friendContents = contentRepository.getByUsersAndVisibilities(users, List.of(VisibilityLevel.FRIENDS));
     return friendContents;
+  }
+
+  public void addContent(Long userId, VisibilityLevel visibilityLevel, String title, String url,
+                         String imageUrl, String description) {
+    if (isNull(userId)) {
+      return;
+    }
+    Optional<User> userOptional = userRepository.findById(userId);
+    if (userOptional.isEmpty()) {
+      return;
+    }
+    LocalDateTime now = LocalDateTime.now();
+    Content content = new Content();
+    content.setVisibilityLevel(visibilityLevel);
+    content.setTitle(title);
+    content.setUrl(url);
+    content.setImageUrl(imageUrl);
+    content.setDescription(description);
+    content.setCreatorId(userOptional.get());
+    content.setCreatedAt(now);
+    content.setLastUpdatedAt(now);
+    contentRepository.save(content);
+  }
+
+  public void modifyContent(Long contentId, VisibilityLevel visibilityLevel, String title, String url, String imageUrl,
+                            String description) throws Exception {
+    Content content = contentRepository.findById(contentId).orElseThrow();
+    User creatorUser = content.getCreatorId();
+    CustomUserDetails principal = getPrincipal();
+    if (!principal.getUserId().equals(creatorUser.getId())) {
+      throw new Exception("Not authorized");
+    }
+    LocalDateTime now = LocalDateTime.now();
+    content.setLastUpdatedAt(now);
+    content.setVisibilityLevel(visibilityLevel);
+    content.setTitle(title);
+    content.setUrl(url);
+    content.setImageUrl(imageUrl);
+    content.setDescription(description);
+    contentRepository.save(content);
+  }
+
+  public void deleteContent(Long contentId) throws Exception {
+    Optional<Content> contentOptional = contentRepository.findById(contentId);
+    Content content = contentOptional.orElseThrow();
+    User creatorUser = content.getCreatorId();
+    CustomUserDetails principal = getPrincipal();
+    if (!principal.getUserId().equals(creatorUser.getId())) {
+      throw new Exception("Not allowed");
+    }
+    contentRepository.delete(content);
   }
 }

@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -25,11 +26,14 @@ public class Content extends AbstractEntity {
   @Column(nullable = false)
   private String title;
 
+  @Lob
   @Column(nullable = false)
   private String url;
 
+  @Lob
   private String imageUrl;
 
+  @Lob
   private String description;
 
   @JsonIgnore
