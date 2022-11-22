@@ -2,7 +2,7 @@ package com.infrasave.config;
 
 import com.infrasave.entity.User;
 import com.infrasave.entity.UserRole;
-import com.infrasave.repository.UserRepository;
+import com.infrasave.repository.user.UserRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

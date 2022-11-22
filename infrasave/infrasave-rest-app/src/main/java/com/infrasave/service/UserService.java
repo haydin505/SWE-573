@@ -1,7 +1,7 @@
 package com.infrasave.service;
 
 import com.infrasave.entity.User;
-import com.infrasave.repository.UserRepository;
+import com.infrasave.repository.user.UserRepository;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 

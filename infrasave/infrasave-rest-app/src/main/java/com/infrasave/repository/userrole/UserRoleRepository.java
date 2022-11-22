@@ -1,4 +1,4 @@
-package com.infrasave.repository;
+package com.infrasave.repository.userrole;
 
 import com.infrasave.entity.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
