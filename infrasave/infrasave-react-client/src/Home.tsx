@@ -1,34 +1,52 @@
-import React from "react";
-import {Anchor, Card, Image, Layout} from "antd";
+import React, {useEffect, useState} from "react";
+import {Anchor, Button, Card, Image, Layout, Space} from "antd";
 import "./Home.css";
+import axios from "axios";
+import {Response} from "./response";
+import {Content} from "./types";
+import AddContentModal from "./AddContentModal";
+import {useSelector} from "react-redux";
+import {RootState} from "./redux/store";
 
 const Home: React.FC = () => {
-	const { Link } = Anchor;
+	const [contents, setContents] = useState([]);
+	const [showAddContentModal, setShowAddContentModal] = useState(false);
+	const {Link} = Anchor;
+
+	const authenticated = useSelector((state: RootState) => state.authentication.authenticated);
+
+	const addContent = () => {
+		showAddContentModal ? setShowAddContentModal(false) : setShowAddContentModal(true);
+	}
+
+	useEffect(() => {
+		axios.get("http://localhost:8080/contents/my-feed", {withCredentials: true}).then(res => {
+			const response: Response = res.data;
+			setContents(response.data);
+		})
+	}, [])
+
 	return <div className="site-card-border-less-wrapper">
 		<h1>Home</h1>
 		<Layout style={{
 			padding: '50px',
 			background: '#ececec'
 		}}>
-			<Card title={<Image title={"hey"} width={50} src="https://img.icons8.com/color/512/twitter.png"/>} className="content">
-				<h2>Analysis: Nagging U.S. Treasury liquidity problems raise Fed balance sheet predicament</h2>
-				<Anchor>
-					<Link target="_blank" href="https://twitter.com/Reuters/status/1590027914367713280" title="Link" />
-				</Anchor>
-				<Image width={450} src="https://pbs.twimg.com/media/FhDp9jIXEAIllKD?format=jpg&name=medium"/>
-			</Card>
-			<Card title={"2"} className="content">
-				<p>2</p>
-				<p>2</p>
-				<p>2</p>
-				<p>2</p>
-			</Card>
-			<Card title={"3"} className="content">
-				<p>3</p>
-				<p>3</p>
-				<p>3</p>
-				<p>3</p>
-			</Card>
+			{authenticated && <Space>
+        <Button size='middle' type="primary" htmlType="submit" onClick={addContent}>
+          Add Content
+        </Button>
+      </Space>}
+			<AddContentModal showAddContentModal={showAddContentModal} setShowAddContentModal={addContent}/>
+			{contents.length > 0 ? contents.map((content: Content) => {
+				return (<Card className="content">
+					<h2>{content.title}</h2>
+					<Anchor>
+						<Link target="_blank" href={content.url} title="Link"/>
+					</Anchor>
+					<Image width={450} src={content.imageUrl}/>
+				</Card>)
+			}) : <h2>No content 😢</h2>}
 		</Layout>
 	</div>
 }

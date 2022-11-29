@@ -19,10 +19,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @SpringBootApplication
 @EnableJpaRepositories
+@EnableSwagger2
 public class InfrasaveRestAppApplication {
 
   public static void main(String[] args) {
@@ -57,8 +59,9 @@ public class InfrasaveRestAppApplication {
       Content content = new Content();
       content.setCreatedAt(now);
       content.setLastUpdatedAt(now);
-      content.setTitle("Test-Title");
-      content.setUrl("Test-Url");
+      content.setTitle("Analysis: Nagging U.S. Treasury liquidity problems raise Fed balance sheet predicament");
+      content.setUrl("https://twitter.com/Reuters/status/1590027914367713280");
+      content.setImageUrl("https://pbs.twimg.com/media/FhDp9jIXEAIllKD?format=jpg&name=medium");
       content.setCreatorId(user);
       content.setVisibilityLevel(VisibilityLevel.EVERYONE);
       contentRepository.save(content);

@@ -33,14 +33,14 @@ public class SecurityConfiguration {
         .exceptionHandling().accessDeniedHandler(new AccessDeniedHandlerImpl())
         .and()
         .addFilterBefore(new SecurityServletFilter(), UsernamePasswordAuthenticationFilter.class)
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
         .and()
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
         .authorizeRequests().antMatchers("/exit", "/login", "/register", "/forgot-password", "/users/**").permitAll()
         .anyRequest().authenticated();
     http.formLogin().disable();
     http.csrf().disable();
-    http.cors().disable();
+    http.cors();
     return http.build();
   }
 

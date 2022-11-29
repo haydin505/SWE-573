@@ -18,7 +18,6 @@ function App(): JSX.Element {
 			}
 		}).catch((error) => {
 			if (error.response.status === 403) {
-				console.log("hereee")
 				localStorage.removeItem("authenticated");
 				dispatch(logout());
 			}
