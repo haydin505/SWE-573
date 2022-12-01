@@ -1,14 +1,17 @@
 import {FC, useState} from "react";
 import {Button, Form, Input, Modal, Select} from "antd";
-import {Content, VisibilityLevel} from "./types";
+import {Content, VisibilityLevel} from "./types/types";
 import TextArea from "antd/es/input/TextArea";
 import axios from "axios";
-import {Response} from "./response"
+import {Response} from "./types/response"
+import {enum2Options} from "antd-utils";
 
 interface AddContentModalProps {
 	showAddContentModal: boolean;
 	setShowAddContentModal: () => void;
 }
+
+const options = enum2Options(VisibilityLevel)
 
 const AddContentModal: FC<AddContentModalProps> = (props: AddContentModalProps): JSX.Element => {
 	const [loading, setLoading] = useState(false);
@@ -21,8 +24,10 @@ const AddContentModal: FC<AddContentModalProps> = (props: AddContentModalProps):
 			if (!response.successful) {
 				alert(response.errorDetail);
 			}
-		}).finally(
-			() => setLoading(false));
+		}).finally(() => {
+			setLoading(false)
+			props.setShowAddContentModal()
+		});
 	}
 
 	return <Modal open={props.showAddContentModal} onCancel={props.setShowAddContentModal} footer={null}>
@@ -46,21 +51,7 @@ const AddContentModal: FC<AddContentModalProps> = (props: AddContentModalProps):
 			</Form.Item>
 			<Form.Item label={"Privacy Level"} name="visibilityLevel"
 			           rules={[{required: true, message: "Please select privacy level."}]}>
-				<Select options={
-					[
-						{
-							value: VisibilityLevel.PRIVATE,
-							label: 'Private'
-						},
-						{
-							value: VisibilityLevel.FRIENDS,
-							label: 'Only Friends'
-						},
-						{
-							value: VisibilityLevel.EVERYONE,
-							label: 'Everyone'
-						}
-					]}/>
+				<Select options={options}/>
 			</Form.Item>
 			<Form.Item wrapperCol={{offset: 11}}>
 				<Button type="primary" htmlType="submit" loading={loading}>

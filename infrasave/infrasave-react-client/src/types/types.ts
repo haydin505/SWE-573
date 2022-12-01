@@ -10,6 +10,6 @@ export interface Content {
 	visibilityLevel: VisibilityLevel;
 }
 
-export enum VisibilityLevel{
-	EVERYONE, PRIVATE,FRIENDS
+export enum VisibilityLevel {
+	Everyone = "EVERYONE", Private = "PRIVATE", "Only Friends" = "FRIENDS"
 }

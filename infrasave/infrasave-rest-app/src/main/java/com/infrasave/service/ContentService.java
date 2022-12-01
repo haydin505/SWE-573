@@ -6,6 +6,7 @@ import com.infrasave.entity.Content;
 import com.infrasave.entity.Friend;
 import com.infrasave.entity.User;
 import com.infrasave.enums.VisibilityLevel;
+import com.infrasave.exception.NotAuthorizedException;
 import com.infrasave.repository.content.ContentRepository;
 import com.infrasave.repository.friend.FriendRepository;
 import com.infrasave.repository.user.UserRepository;
@@ -114,12 +115,12 @@ public class ContentService {
   }
 
   public void modifyContent(Long contentId, VisibilityLevel visibilityLevel, String title, String url, String imageUrl,
-                            String description) throws Exception {
+                            String description) {
     Content content = contentRepository.findById(contentId).orElseThrow();
     User creatorUser = content.getCreatorId();
     CustomUserDetails principal = getPrincipal();
     if (!principal.getUserId().equals(creatorUser.getId())) {
-      throw new Exception("Not authorized");
+      throw new NotAuthorizedException();
     }
     LocalDateTime now = LocalDateTime.now();
     content.setLastUpdatedAt(now);
@@ -131,13 +132,13 @@ public class ContentService {
     contentRepository.save(content);
   }
 
-  public void deleteContent(Long contentId) throws Exception {
+  public void deleteContent(Long contentId) {
     Optional<Content> contentOptional = contentRepository.findById(contentId);
     Content content = contentOptional.orElseThrow();
     User creatorUser = content.getCreatorId();
     CustomUserDetails principal = getPrincipal();
     if (!principal.getUserId().equals(creatorUser.getId())) {
-      throw new Exception("Not allowed");
+      throw new NotAuthorizedException();
     }
     contentRepository.delete(content);
   }

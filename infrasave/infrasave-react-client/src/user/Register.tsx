@@ -1,7 +1,7 @@
 import {Button, Card, DatePicker, Form, Input, Layout} from 'antd';
 import React, {useEffect} from 'react';
 import axios from 'axios';
-import {RegisterRequest} from "../requests";
+import {RegisterRequest} from "../types/requests";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import {useNavigate} from "react-router-dom";

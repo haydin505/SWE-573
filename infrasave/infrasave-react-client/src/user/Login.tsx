@@ -1,7 +1,7 @@
 import {Button, Card, Form, Input, Layout} from 'antd';
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {LoginRequest} from "../requests";
+import {LoginRequest} from "../types/requests";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import {authenticateFail, authenticateSuccess} from "../redux/authenticationReducer";

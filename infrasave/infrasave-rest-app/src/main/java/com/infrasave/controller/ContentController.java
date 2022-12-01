@@ -11,7 +11,6 @@ import com.infrasave.service.ContentService;
 import java.util.List;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,8 +61,8 @@ public class ContentController {
   }
 
   @PutMapping
-  public AppResponse modifyContent(@RequestBody @Validated ModifyContentRequest request) throws Exception {
-    contentService.modifyContent(request.contentId(),
+  public AppResponse modifyContent(@RequestBody @Validated ModifyContentRequest request) {
+    contentService.modifyContent(request.id(),
                                  request.visibilityLevel(),
                                  request.title(),
                                  request.url(),
@@ -73,7 +72,7 @@ public class ContentController {
   }
 
   @DeleteMapping("/{contentId}")
-  public AppResponse deleteContent(@PathVariable Long contentId) throws Exception {
+  public AppResponse deleteContent(@PathVariable Long contentId) {
     contentService.deleteContent(contentId);
     return AppResponses.successful();
   }
