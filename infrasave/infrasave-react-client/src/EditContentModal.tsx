@@ -2,9 +2,9 @@ import {FC, useState} from "react";
 import {Button, Form, Input, Modal, Select} from "antd";
 import {Content, VisibilityLevel} from "./types/types";
 import TextArea from "antd/es/input/TextArea";
-import axios from "axios";
 import {Response} from "./types/response"
-import { enum2Options } from 'antd-utils'
+import {enum2Options} from 'antd-utils'
+import axiosInstance from "./customAxios";
 
 interface EditContentModalProps {
 	showEditContentModal: boolean;
@@ -20,7 +20,7 @@ const EditContentModal: FC<EditContentModalProps> = (props: EditContentModalProp
 	const editContent = (content: Content) => {
 		console.log(content)
 		setLoading(true);
-		axios.put("http://localhost:8080/contents", content, {withCredentials: true}).then(res => {
+		axiosInstance.put("/contents", content, {withCredentials: true}).then(res => {
 			const response: Response = res.data;
 			if (!response.successful) {
 				alert(response.errorDetail);
@@ -59,8 +59,10 @@ const EditContentModal: FC<EditContentModalProps> = (props: EditContentModalProp
 				<Input/>
 			</Form.Item>
 			<Form.Item label={"Privacy Level"} name="visibilityLevel"
-			           rules={[{required: true, message: "Please select privacy level."}]}>
-				<Select defaultValue={props.content?.visibilityLevel} options={options}/>
+			           rules={[{required: true, message: "Please select privacy level."}]}
+			           valuePropName="option"
+			initialValue={props.content?.visibilityLevel}>
+				<Select allowClear showSearch defaultValue={props.content?.visibilityLevel} options={options}/>
 			</Form.Item>
 			<Form.Item wrapperCol={{offset: 11}}>
 				<Button type="primary" htmlType="submit" loading={loading}>

@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import {useNavigate} from "react-router-dom";
 import {Content} from "antd/es/layout/layout";
+import axiosInstance from "../customAxios";
 
 const Register: React.FC = () => {
 	const onFinish = (values: any) => {
@@ -18,8 +19,8 @@ const Register: React.FC = () => {
 			birthDate: values.birthDate
 		}
 		console.log(registerRequest);
-		axios.post("http://localhost:8080/register", registerRequest, {withCredentials: true}).then(
-			(response) => {
+		axiosInstance.post("http://localhost:8080/register", registerRequest, {withCredentials: true}).then(
+			response => {
 				if (response.status === 200) {
 					const data = response.data;
 					console.log(data);

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Anchor, Button, Card, Col, Descriptions, Empty, Image, Layout, Row, Space, Spin} from "antd";
 import "./Home.css";
-import axios from "axios";
 import {Response} from "./types/response";
 import {Content} from "./types/types";
 import AddContentModal from "./AddContentModal";
@@ -9,6 +8,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "./redux/store";
 import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
 import EditContentModal from "./EditContentModal";
+import axiosInstance from "./customAxios";
 
 const Home: React.FC = () => {
 	const [loading, setLoading] = useState(false);
@@ -36,7 +36,7 @@ const Home: React.FC = () => {
 
 	const getMyFeed = () => {
 		setLoading(true);
-		axios.get("http://localhost:8080/contents/my-feed", {withCredentials: true}).then(res => {
+		axiosInstance.get("/contents/my-feed", {withCredentials: true}).then(res => {
 			const response: Response = res.data;
 			setContents(response.data);
 		}).finally(() => setLoading(false));
@@ -48,7 +48,7 @@ const Home: React.FC = () => {
 	}
 
 	const onClickDeleteContent = (content: Content) => {
-		axios.delete("http://localhost:8080/contents/" + content.id, {withCredentials: true}).then(res => {
+		axiosInstance.delete("/contents/" + content.id, {withCredentials: true}).then(res => {
 			const response: Response = res.data;
 			if (!response.successful) {
 				alert(response.errorDetail);

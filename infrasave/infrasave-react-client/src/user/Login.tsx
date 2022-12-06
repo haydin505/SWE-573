@@ -1,12 +1,12 @@
 import {Button, Card, Form, Input, Layout} from 'antd';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {LoginRequest} from "../types/requests";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import {authenticateFail, authenticateSuccess} from "../redux/authenticationReducer";
 import {useNavigate} from "react-router-dom";
 import {Content} from "antd/es/layout/layout";
+import axiosInstance from "../customAxios";
 
 const Login: React.FC = () => {
 
@@ -17,15 +17,13 @@ const Login: React.FC = () => {
 			password: values.password
 		}
 		setLoading(true);
-		const response = axios.post("http://localhost:8080/login", loginRequest, {withCredentials: true}).then(
-			(response) => {
+		axiosInstance.post("/login", loginRequest, {withCredentials: true}).then(
+			response => {
 				if (response.status === 200) {
 					dispatch(authenticateSuccess());
 					localStorage.setItem("authenticated", "true");
 				}
-				axios.get("http://localhost:8080/secret", {withCredentials: true}).then((response2) => {
-				})
-			}).catch((response) => {
+			}).catch(response => {
 			dispatch(authenticateFail());
 		}).finally(() => setLoading(false));
 	};
