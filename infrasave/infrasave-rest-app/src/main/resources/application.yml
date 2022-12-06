@@ -2,7 +2,7 @@ spring:
   datasource:
     url: ${prop.spring.dataSources.jdbcUrl}
     username: root
-    password:
+    password: ${aws.credentials.dataSource.password}
   jpa:
     hibernate:
       ddl-auto: create-drop

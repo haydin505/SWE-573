@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
-import axios from 'axios';
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import {logout} from "../redux/authenticationReducer";
 import {useNavigate} from "react-router-dom";
+import axiosInstance from "../customAxios";
 
 const Logout = () => {
 	const dispatch = useDispatch();
@@ -14,7 +14,7 @@ const Logout = () => {
 		if (!authenticated) {
 			navigate("/");
 		}
-		axios.post("http://localhost:8080/exit", {}, {withCredentials: true}).then((response) => {
+		axiosInstance.post("/exit", {}, {withCredentials: true}).then((response) => {
 			if (response.status === 200) {
 				dispatch(logout());
 				localStorage.removeItem("authenticated");

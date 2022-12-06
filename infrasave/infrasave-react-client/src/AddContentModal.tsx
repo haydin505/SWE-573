@@ -2,9 +2,9 @@ import {FC, useState} from "react";
 import {Button, Form, Input, Modal, Select} from "antd";
 import {Content, VisibilityLevel} from "./types/types";
 import TextArea from "antd/es/input/TextArea";
-import axios from "axios";
 import {Response} from "./types/response"
 import {enum2Options} from "antd-utils";
+import axiosInstance from "./customAxios";
 
 interface AddContentModalProps {
 	showAddContentModal: boolean;
@@ -19,7 +19,7 @@ const AddContentModal: FC<AddContentModalProps> = (props: AddContentModalProps):
 	const addContentModal = (content: Content) => {
 		console.log(content);
 		setLoading(true);
-		axios.post("http://localhost:8080/contents", content, {withCredentials: true}).then(res => {
+		axiosInstance.post("/contents", content, {withCredentials: true}).then(res => {
 			const response: Response = res.data;
 			if (!response.successful) {
 				alert(response.errorDetail);
