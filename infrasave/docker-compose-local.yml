@@ -31,7 +31,7 @@ services:
     environment:
       prop.spring.dataSources.jdbcUrl: jdbc:mysql://mysqldb:3306/infrasave
     container_name: infrasave-backend
-    image: mhnaydin/infrasave-backend
+    build: ./infrasave-rest-app/
     ports:
       - '8080:8080'
     expose:
@@ -48,7 +48,7 @@ services:
           memory: 1000M
   frontend:
     container_name: infrasave-frontend
-    image: mhnaydin/infrasave-frontend
+    build: ./infrasave-react-client
     ports:
       - '3000:3000'
     expose:
