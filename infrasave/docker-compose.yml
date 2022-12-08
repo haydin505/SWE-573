@@ -29,8 +29,12 @@ services:
       - ./sql/create_schema.sql:/docker-entrypoint-initdb.d/create_tables.sql
   backend:
     environment:
-      prop.spring.dataSources.jdbcUrl: jdbc:mysql://mysqldb:3306/infrasave
-    container_name: infrasave-backend
+      - active_profile=prod
+      - datasource_url=jdbc:mysql://mysqldb:3306/infrasave
+      - datasource_username=root
+      - datasource_password
+    container_name: infrasave-backends
+    build: ./infrasave-rest-app/
     image: mhnaydin/infrasave-backend
     ports:
       - '8080:8080'
@@ -38,28 +42,29 @@ services:
       - '8080:8080'
     networks:
       - test-network
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 2000M
-        reservations:
-          cpus: '0.5'
-          memory: 1000M
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '1'
+#          memory: 2000M
+#        reservations:
+#          cpus: '0.5'
+#          memory: 1000M
   frontend:
     container_name: infrasave-frontend
+    build: ./infrasave-react-client
     image: mhnaydin/infrasave-frontend
     ports:
-      - '3000:3000'
+      - '80:3000'
     expose:
-      - '3000:3000'
+      - '80:3000'
     networks:
       - test-network
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 2000M
-        reservations:
-          cpus: '0.5'
-          memory: 1000M
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '1'ss
+#          memory: 2000M
+#        reservations:
+#          cpus: '0.5'
+#          memory: 1000M

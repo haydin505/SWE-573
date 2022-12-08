@@ -1,8 +1,10 @@
 spring:
+  profiles:
+    active: ${active_profile}
   datasource:
-    url: ${prop.spring.dataSources.jdbcUrl}
-    username: root
-    password: ${aws.credentials.dataSource.password}
+    url: ${datasource_url}
+    username: ${datasource_username}
+    password: ${datasource_password}
   jpa:
     hibernate:
       ddl-auto: create-drop

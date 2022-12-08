@@ -4,5 +4,7 @@ COPY src ./src
 COPY pom.xml ./
 COPY mvnw ./
 COPY .mvn/ .mvn
+RUN ./mvnw clean install -DskipTests
+EXPOSE 8080
 
-CMD ["./mvnw", "spring-boot:run"]
+CMD ["java", "-jar", "./target/infrasave-rest-app.jar"]
