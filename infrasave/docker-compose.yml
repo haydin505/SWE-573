@@ -4,35 +4,36 @@ networks:
     name: test-network
     driver: bridge
 services:
-  db:
-    image: mysql
-    container_name: mysqldb
-    restart: always
-    networks:
-      - test-network
-    environment:
-      # So you don't have to use root, but you can if you like
-      # You can use whatever password you like
-      - MYSQL_USER=admin
-      - MYSQL_PASSWORD
-      # Password for root access
-      - MYSQL_ROOT_PASSWORD
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
-    ports:
-      # <Port exposed> : < MySQL Port running inside container>
-      - '3306:3306'
-    expose:
-      # Opens port 3306 on the container
-      - '3306:3306'
-      # Where our data will be persisted
-    volumes:
-      - ./sql/create_schema.sql:/docker-entrypoint-initdb.d/create_tables.sql
+#  db:
+#    image: mysql
+#    container_name: mysqldb
+#    restart: always
+#    networks:
+#      - test-network
+#    environment:
+#      # So you don't have to use root, but you can if you like
+#      # You can use whatever password you like
+#      - MYSQL_USER=admin
+#      - MYSQL_PASSWORD=123456
+#      # Password for root access
+#      - MYSQL_ROOT_PASSWORD=123456
+#      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+#    ports:
+#      # <Port exposed> : < MySQL Port running inside container>
+#      - '3306:3306'
+#    expose:
+#      # Opens port 3306 on the container
+#      - '3306:3306'
+#      # Where our data will be persisted
+#    volumes:
+#      - ./sql/create_schema.sql:/docker-entrypoint-initdb.d/create_tables.sql
   backend:
     environment:
       - active_profile=prod
-      - datasource_url=jdbc:mysql://mysqldb:3306/infrasave
+      - datasource_url=jdbc:mysql://infrasave-db.c2cgjezq6ikh.eu-central-1.rds.amazonaws.com:3306/infrasave
       - datasource_username=root
-      - datasource_password
+      - datasource_password=test123456
+      - hibernate_ddl_auto=update
     container_name: infrasave-backend
     build: ./infrasave-rest-app/
     image: mhnaydin/infrasave-backend
