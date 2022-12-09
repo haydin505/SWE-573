@@ -14,6 +14,7 @@ import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -33,6 +34,9 @@ public class InfrasaveRestAppApplication {
 
   @Bean
   @Transactional
+  @ConditionalOnProperty(value = "spring.profiles.active",
+                         havingValue = "dev",
+                         matchIfMissing = false)
   CommandLineRunner commandLineRunner(UserRepository userRepository,
                                       ContentRepository contentRepository,
                                       FriendRepository friendRepository,
