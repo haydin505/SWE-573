@@ -26,7 +26,7 @@ make build-db
 ``` 
 or 
 ```
-docker-compose -f infrasave/docker-compose.yml up -d db
+docker-compose -f infrasave/docker-compose-local.yml up -d db
 ```
 ### 2. Build Backend
 Run 
