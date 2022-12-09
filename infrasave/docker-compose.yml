@@ -28,6 +28,7 @@ services:
 #    volumes:
 #      - ./sql/create_schema.sql:/docker-entrypoint-initdb.d/create_tables.sql
   backend:
+    restart: always
     environment:
       - active_profile=prod
       - datasource_url=jdbc:mysql://infrasave-db.c2cgjezq6ikh.eu-central-1.rds.amazonaws.com:3306/infrasave
@@ -52,6 +53,7 @@ services:
   #          cpus: '0.5'
   #          memory: 1000M
   frontend:
+    restart: always
     container_name: infrasave-frontend
     build: ./infrasave-react-client
     image: mhnaydin/infrasave-frontend
