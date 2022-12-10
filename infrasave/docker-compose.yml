@@ -55,10 +55,11 @@ services:
   frontend:
     restart: always
     container_name: infrasave-frontend
-    build: ./infrasave-react-client
+    build:
+      dockerfile: infrasave-react-client
+      args:
+        REACT_APP_BASE_URL: ${REACT_APP_BASE_URL}
     image: mhnaydin/infrasave-frontend
-    environment:
-      REACT_APP_BASE_URL: ${REACT_APP_BASE_URL}
     ports:
       - '3000:3000'
     expose:
