@@ -57,6 +57,8 @@ services:
     container_name: infrasave-frontend
     build: ./infrasave-react-client
     image: mhnaydin/infrasave-frontend
+    environment:
+      REACT_APP_BASE_URL: ${REACT_APP_BASE_URL}
     ports:
       - '80:3000'
     expose:

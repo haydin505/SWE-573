@@ -3,7 +3,7 @@
 This project developed for SWE-573 lecture.
 
 You can access demo of the application with following link:
-http://35.156.214.242
+https://dialecticsoftware.com/
 
 ## How to build this project?
 
