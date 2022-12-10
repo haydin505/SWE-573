@@ -60,9 +60,9 @@ services:
     environment:
       REACT_APP_BASE_URL: ${REACT_APP_BASE_URL}
     ports:
-      - '80:3000'
+      - '3000:3000'
     expose:
-      - '80:3000'
+      - '3000:3000'
     networks:
       - test-network
 #    deploy:
