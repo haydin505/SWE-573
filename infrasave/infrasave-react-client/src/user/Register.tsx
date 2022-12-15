@@ -1,6 +1,5 @@
 import {Button, Card, DatePicker, Form, Input, Layout} from 'antd';
 import React, {useEffect} from 'react';
-import axios from 'axios';
 import {RegisterRequest} from "../types/requests";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../redux/store";
@@ -54,7 +53,10 @@ const Register: React.FC = () => {
 	}, [authenticated])
 	return (
 		<div>
-			<Layout>
+			<Layout style={{
+				padding: '50px',
+				background: '#ececec'
+			}}>
 				<Content style={{margin: 'auto', width: '50%', height: 'auto'}}>
 					<Card>
 						<Form
@@ -93,7 +95,7 @@ const Register: React.FC = () => {
 								rules={[{required: true, message: 'Please input your password!'}]}
 								hasFeedback
 							>
-								<Input.Password/>x"
+								<Input.Password/>
 							</Form.Item>
 							<Form.Item
 								name="confirm"

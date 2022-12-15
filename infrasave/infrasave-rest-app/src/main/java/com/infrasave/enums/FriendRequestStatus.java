@@ -5,6 +5,8 @@ package com.infrasave.enums;
  */
 public enum FriendRequestStatus {
 
-  PENDING, APPROVED, REJECTED;
-
+  PENDING,
+  APPROVED,
+  REJECTED,
+  NONE;
 }

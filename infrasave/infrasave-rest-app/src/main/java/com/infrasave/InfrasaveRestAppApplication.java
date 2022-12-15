@@ -2,14 +2,17 @@ package com.infrasave;
 
 import com.infrasave.entity.Content;
 import com.infrasave.entity.Friend;
+import com.infrasave.entity.Tag;
 import com.infrasave.entity.User;
 import com.infrasave.entity.UserRole;
 import com.infrasave.enums.FriendRequestStatus;
 import com.infrasave.enums.VisibilityLevel;
 import com.infrasave.repository.content.ContentRepository;
 import com.infrasave.repository.friend.FriendRepository;
+import com.infrasave.repository.tag.TagRepository;
 import com.infrasave.repository.user.UserRepository;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -40,9 +43,11 @@ public class InfrasaveRestAppApplication {
   CommandLineRunner commandLineRunner(UserRepository userRepository,
                                       ContentRepository contentRepository,
                                       FriendRepository friendRepository,
+                                      TagRepository tagRepository,
                                       PasswordEncoder passwordEncoder) {
     return args -> {
       User user = new User();
+      user.setUsername("suleyman444");
       user.setName("Suleyman");
       user.setSurname("Yar");
       user.setEmail("test@test.com");
@@ -60,6 +65,14 @@ public class InfrasaveRestAppApplication {
       user.setRoles(List.of(userRole));
       userRepository.save(user);
 
+      Tag financeTag = new Tag();
+      financeTag.setName("finance");
+      financeTag.setDescription("Finance related contents");
+      financeTag.setColor("#227C70");
+      financeTag.setCreatedAt(now);
+      financeTag.setLastUpdatedAt(now);
+      tagRepository.save(financeTag);
+
       Content content = new Content();
       content.setCreatedAt(now);
       content.setLastUpdatedAt(now);
@@ -68,9 +81,11 @@ public class InfrasaveRestAppApplication {
       content.setImageUrl("https://pbs.twimg.com/media/FhDp9jIXEAIllKD?format=jpg&name=medium");
       content.setCreatorId(user);
       content.setVisibilityLevel(VisibilityLevel.EVERYONE);
+      content.setTags(new HashSet<>(List.of(financeTag)));
       contentRepository.save(content);
 
       User user2 = new User();
+      user2.setUsername("suleyman123");
       user2.setName("Suleyman");
       user2.setSurname("Yar");
       user2.setEmail("test@test2.com");
@@ -95,6 +110,14 @@ public class InfrasaveRestAppApplication {
       friend.setLastUpdatedAt(now);
       friendRepository.save(friend);
 
+      Tag defaultTag = new Tag();
+      defaultTag.setName("default");
+      defaultTag.setDescription("default tag");
+      defaultTag.setColor("#6B728E");
+      defaultTag.setCreatedAt(now);
+      defaultTag.setLastUpdatedAt(now);
+      tagRepository.save(defaultTag);
+
       Content friendContent = new Content();
       friendContent.setCreatedAt(now);
       friendContent.setLastUpdatedAt(now);
@@ -102,6 +125,7 @@ public class InfrasaveRestAppApplication {
       friendContent.setUrl("Test-Url");
       friendContent.setCreatorId(user2);
       friendContent.setVisibilityLevel(VisibilityLevel.FRIENDS);
+      friendContent.setTags(new HashSet<>(List.of(financeTag, defaultTag)));
       contentRepository.save(friendContent);
     };
   }

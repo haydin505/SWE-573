@@ -5,9 +5,9 @@ import com.infrasave.config.CustomUserDetails;
 import com.infrasave.entity.User;
 import com.infrasave.entity.UserRole;
 import com.infrasave.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,16 +29,10 @@ public class UserController {
     this.userService = userService;
   }
 
-  @Secured({"ROLE_ADMIN"})
   @GetMapping("/{id}")
-  public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
-    User user = userService.getUserById(id);
-    UserDTO userDTO = new UserDTO();
-    userDTO.setName(user.getName());
-    userDTO.setSurname(userDTO.getSurname());
-    userDTO.setEmail(userDTO.getEmail());
-    userDTO.setRoles(user.getRoles().stream().map(UserRole::getRole).toList());
-    return ResponseEntity.ok(userDTO);
+  @ApiOperation("Get user page information")
+  public UserDTO getUser(@PathVariable Long id) {
+    return userService.getUserDTOByContent(id);
   }
 
   @GetMapping("/current")
@@ -55,6 +49,8 @@ public class UserController {
     userDTO.setSurname(user.getSurname());
     userDTO.setEmail(user.getEmail());
     userDTO.setRoles(user.getRoles().stream().map(UserRole::getRole).toList());
+    userDTO.setUserId(user.getId());
+    userDTO.setUsername(user.getUsername());
     return ResponseEntity.ok(userDTO);
   }
 }

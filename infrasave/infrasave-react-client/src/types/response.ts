@@ -1,5 +1,5 @@
 export interface Response {
-	data: [];
+	data: any;
 	errorCode: string;
 	errorDetail: string;
 	errorTitle: string;

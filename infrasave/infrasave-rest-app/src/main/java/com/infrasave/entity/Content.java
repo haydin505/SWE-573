@@ -2,11 +2,15 @@ package com.infrasave.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.infrasave.enums.VisibilityLevel;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -40,6 +44,14 @@ public class Content extends AbstractEntity {
   @ManyToOne(targetEntity = User.class)
   @JoinColumn(name = "creator_id", nullable = false)
   private User creatorId;
+
+  @JsonIgnore
+  @ManyToMany
+  @JoinTable(
+      name = "content_tag",
+      joinColumns = {@JoinColumn(name = "content_id")},
+      inverseJoinColumns = {@JoinColumn(name = "tag_id")})
+  private Set<Tag> tags = new HashSet<>();
 
   public VisibilityLevel getVisibilityLevel() {
     return visibilityLevel;
@@ -87,5 +99,13 @@ public class Content extends AbstractEntity {
 
   public void setCreatorId(User creatorId) {
     this.creatorId = creatorId;
+  }
+
+  public Set<Tag> getTags() {
+    return tags;
+  }
+
+  public void setTags(Set<Tag> tags) {
+    this.tags = tags;
   }
 }

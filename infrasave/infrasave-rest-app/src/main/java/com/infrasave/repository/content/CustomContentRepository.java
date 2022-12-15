@@ -13,4 +13,8 @@ public interface CustomContentRepository {
   List<Content> getByUsersAndVisibilities(List<User> users, List<VisibilityLevel> visibilityLevels);
 
   List<Content> getByVisibility(List<VisibilityLevel> visibilityLevels);
+
+  List<Content> getContentByTagName(String name);
+
+  List<Content> getByTitleOrDescription(List<String> params);
 }
