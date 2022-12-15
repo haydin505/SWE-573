@@ -50,7 +50,10 @@ const Login: React.FC = () => {
 	}, [authenticated])
 	return (
 		<div>
-			<Layout>
+			<Layout style={{
+				padding: '50px',
+				background: '#ececec'
+			}}>
 				<Content style={{margin: 'auto', width: '50%', height: 'auto'}}>
 					<Card>
 						<Form

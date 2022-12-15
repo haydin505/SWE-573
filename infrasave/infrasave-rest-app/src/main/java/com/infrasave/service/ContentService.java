@@ -1,9 +1,11 @@
 package com.infrasave.service;
 
 import com.infrasave.bean.ContentDTO;
+import com.infrasave.bean.TagDTO;
 import com.infrasave.config.CustomUserDetails;
 import com.infrasave.entity.Content;
 import com.infrasave.entity.Friend;
+import com.infrasave.entity.Tag;
 import com.infrasave.entity.User;
 import com.infrasave.enums.VisibilityLevel;
 import com.infrasave.exception.NotAuthorizedException;
@@ -12,12 +14,17 @@ import com.infrasave.repository.friend.FriendRepository;
 import com.infrasave.repository.user.UserRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import static com.infrasave.service.Utils.mapCreatorToUserDTO;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 
@@ -26,6 +33,8 @@ import static java.util.Objects.isNull;
  */
 @Service
 public class ContentService {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ContentService.class);
 
   private static final List<VisibilityLevel> validVisibilities =
       List.of(VisibilityLevel.EVERYONE, VisibilityLevel.FRIENDS);
@@ -36,11 +45,14 @@ public class ContentService {
 
   private final FriendRepository friendRepository;
 
+  private final TagService tagService;
+
   public ContentService(ContentRepository contentRepository, UserRepository userRepository,
-                        FriendRepository friendRepository) {
+                        FriendRepository friendRepository, TagService tagService) {
     this.contentRepository = contentRepository;
     this.userRepository = userRepository;
     this.friendRepository = friendRepository;
+    this.tagService = tagService;
   }
 
   private static CustomUserDetails getPrincipal() {
@@ -74,7 +86,15 @@ public class ContentService {
     resultList.addAll(createdContents);
     resultList.addAll(friendContents);
     resultList.addAll(everyoneContents);
-    return resultList.stream().map(ContentDTO::new).toList();
+    List<Long> myContentIds = user.getMyContents().stream().map(myContent -> myContent.getContent().getId()).toList();
+    return resultList.stream()
+                     .map(content -> {
+                       Set<Tag> tags = content.getTags();
+                       List<TagDTO> tagDTOs = tags.stream().map(TagDTO::new).toList();
+                       return new ContentDTO(content, myContentIds.contains(content.getId()),
+                                             mapCreatorToUserDTO(content.getCreatorId()), tagDTOs);
+                     })
+                     .toList();
   }
 
   private List<Content> getFriendContents(User user) {
@@ -93,7 +113,7 @@ public class ContentService {
   }
 
   public void addContent(Long userId, VisibilityLevel visibilityLevel, String title, String url,
-                         String imageUrl, String description) {
+                         String imageUrl, String description, List<Long> tagIds) {
     if (isNull(userId)) {
       return;
     }
@@ -101,7 +121,6 @@ public class ContentService {
     if (userOptional.isEmpty()) {
       return;
     }
-    LocalDateTime now = LocalDateTime.now();
     Content content = new Content();
     content.setVisibilityLevel(visibilityLevel);
     content.setTitle(title);
@@ -109,8 +128,16 @@ public class ContentService {
     content.setImageUrl(imageUrl);
     content.setDescription(description);
     content.setCreatorId(userOptional.get());
+    LocalDateTime now = LocalDateTime.now();
     content.setCreatedAt(now);
     content.setLastUpdatedAt(now);
+    List<Tag> tags = tagService.getTagsByIds(tagIds);
+    if (tags.size() != tagIds.size()) {
+      List<Long> foundTagIds = tags.stream().map(Tag::getId).toList();
+      Long unknownId = tagIds.stream().filter(id -> !foundTagIds.contains(id)).findAny().orElse(null);
+      LOGGER.warn("Unknown id found: {}.", unknownId);
+    }
+    content.setTags(new HashSet<>(tags));
     contentRepository.save(content);
   }
 
@@ -141,5 +168,10 @@ public class ContentService {
       throw new NotAuthorizedException();
     }
     contentRepository.delete(content);
+  }
+
+  public Content getContentById(Long contentId) {
+    Optional<Content> contentOptional = contentRepository.findById(contentId);
+    return contentOptional.orElseThrow();
   }
 }

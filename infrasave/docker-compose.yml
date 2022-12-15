@@ -56,14 +56,15 @@ services:
     restart: always
     container_name: infrasave-frontend
     build:
-      dockerfile: infrasave-react-client
+      context: ./infrasave-react-client
+      dockerfile: Dockerfile
       args:
         REACT_APP_BASE_URL: ${REACT_APP_BASE_URL}
     image: mhnaydin/infrasave-frontend
     ports:
-      - '3000:3000'
+      - '3000:80'
     expose:
-      - '3000:3000'
+      - '3000:80'
     networks:
       - test-network
 #    deploy:

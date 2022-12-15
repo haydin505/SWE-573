@@ -56,7 +56,8 @@ public class ContentController {
                               request.title(),
                               request.url(),
                               request.imageUrl(),
-                              request.description());
+                              request.description(),
+                              request.tagIds());
     return AppResponses.successful();
   }
 

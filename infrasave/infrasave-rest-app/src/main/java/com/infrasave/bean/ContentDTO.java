@@ -3,6 +3,7 @@ package com.infrasave.bean;
 import com.infrasave.entity.Content;
 import com.infrasave.enums.VisibilityLevel;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author huseyinaydin
@@ -15,9 +16,11 @@ public record ContentDTO(Long id,
                          String url,
                          String imageUrl,
                          String description,
-                         Long creatorId) {
+                         Boolean myContent,
+                         UserDTO creatorUser,
+                         List<TagDTO> tags) {
 
-  public ContentDTO(Content content) {
+  public ContentDTO(Content content, Boolean myContent, UserDTO userDTO, List<TagDTO> tagDTO) {
     this(content.getId(),
          content.getCreatedAt(),
          content.getLastUpdatedAt(),
@@ -26,6 +29,8 @@ public record ContentDTO(Long id,
          content.getUrl(),
          content.getImageUrl(),
          content.getDescription(),
-         content.getCreatorId().getId());
+         myContent,
+         userDTO,
+         tagDTO);
   }
 }
