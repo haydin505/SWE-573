@@ -47,9 +47,9 @@ public class InfrasaveRestAppApplication {
                                       PasswordEncoder passwordEncoder) {
     return args -> {
       User user = new User();
-      user.setUsername("suleyman444");
-      user.setName("Suleyman");
-      user.setSurname("Yar");
+      user.setUsername("mehmet600");
+      user.setName("Mehmet");
+      user.setSurname("Selman");
       user.setEmail("test@test.com");
       user.setPassword(passwordEncoder.encode("123456"));
       LocalDateTime now = LocalDateTime.now();

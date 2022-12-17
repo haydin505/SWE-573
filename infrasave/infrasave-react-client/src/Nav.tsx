@@ -1,5 +1,5 @@
 import {Menu} from "antd";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import React, {useEffect} from "react";
 import {AppstoreOutlined, HomeOutlined, LoginOutlined, SearchOutlined, UserOutlined} from '@ant-design/icons';
 import {useDispatch, useSelector} from "react-redux";
@@ -9,7 +9,6 @@ import {authenticateSuccess} from "./redux/authenticationReducer";
 const Nav: React.FC = (): JSX.Element => {
 	const dispatch = useDispatch();
 	const authenticated = useSelector((state: RootState) => state.authentication.authenticated);
-	const navigate = useNavigate();
 	useEffect(() => {
 		const authenticatedLocal = localStorage.getItem("authenticated");
 		if (authenticatedLocal && !authenticated) {

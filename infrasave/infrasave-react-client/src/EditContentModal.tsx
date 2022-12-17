@@ -5,6 +5,7 @@ import TextArea from "antd/es/input/TextArea";
 import {Response} from "./types/response"
 import {enum2Options} from 'antd-utils'
 import axiosInstance from "./customAxios";
+import TagSelect from "./components/tag/TagSelect";
 
 interface EditContentModalProps {
 	showEditContentModal: boolean;
@@ -32,10 +33,10 @@ const EditContentModal: FC<EditContentModalProps> = (props: EditContentModalProp
 			const data: Response = res.response.data;
 			alert(
 				data.violations.map(violation => violation && violation.field ? violation.field + " " + violation.cause : ""));
-		}).finally(
-			() => setLoading(false));
+		}).finally(() => setLoading(false));
 	}
 
+	// @ts-ignore
 	return <Modal open={props.showEditContentModal} onCancel={props.setShowEditContentModal} footer={null}>
 		<Form labelCol={{span: 6}}
 		      labelAlign={"left"}
@@ -61,8 +62,12 @@ const EditContentModal: FC<EditContentModalProps> = (props: EditContentModalProp
 			<Form.Item label={"Privacy Level"} name="visibilityLevel"
 			           rules={[{required: true, message: "Please select privacy level."}]}
 			           valuePropName="option"
-			initialValue={props.content?.visibilityLevel}>
+			           initialValue={props.content?.visibilityLevel}>
 				<Select allowClear showSearch defaultValue={props.content?.visibilityLevel} options={options}/>
+			</Form.Item>
+			<Form.Item label={"Tags"} name="tags">
+				{/* @ts-ignore */}
+				<TagSelect defVal={props.content?.tags}/>
 			</Form.Item>
 			<Form.Item wrapperCol={{offset: 11}}>
 				<Button type="primary" htmlType="submit" loading={loading}>

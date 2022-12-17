@@ -6,8 +6,10 @@ import com.infrasave.bean.AppResponses;
 import com.infrasave.entity.Tag;
 import com.infrasave.service.TagService;
 import java.util.List;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,7 +33,7 @@ public class TagController {
   }
 
   @PostMapping
-  public AppResponse addTag(AddTagRequest request) {
+  public AppResponse addTag(@RequestBody @Validated AddTagRequest request) {
     tagService.addTag(request.name(), request.description(), request.color());
     return AppResponse.successful();
   }
