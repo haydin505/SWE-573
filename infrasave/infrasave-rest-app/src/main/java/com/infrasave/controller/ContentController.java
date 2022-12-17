@@ -57,7 +57,7 @@ public class ContentController {
                               request.url(),
                               request.imageUrl(),
                               request.description(),
-                              request.tagIds());
+                              request.tags());
     return AppResponses.successful();
   }
 
@@ -68,7 +68,8 @@ public class ContentController {
                                  request.title(),
                                  request.url(),
                                  request.imageUrl(),
-                                 request.description());
+                                 request.description(),
+                                 request.tags());
     return AppResponses.successful();
   }
 

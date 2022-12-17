@@ -2,6 +2,7 @@ package com.infrasave.service;
 
 import com.infrasave.entity.Tag;
 import com.infrasave.repository.tag.TagRepository;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,9 @@ public class TagService {
     tag.setName(name);
     tag.setDescription(description);
     tag.setColor(color);
+    LocalDateTime now = LocalDateTime.now();
+    tag.setCreatedAt(now);
+    tag.setLastUpdatedAt(now);
     tagRepository.save(tag);
   }
 

@@ -5,6 +5,7 @@ import TextArea from "antd/es/input/TextArea";
 import {Response} from "./types/response"
 import {enum2Options} from "antd-utils";
 import axiosInstance from "./customAxios";
+import TagSelect from "./components/tag/TagSelect";
 
 interface AddContentModalProps {
 	showAddContentModal: boolean;
@@ -24,10 +25,10 @@ const AddContentModal: FC<AddContentModalProps> = (props: AddContentModalProps):
 			if (!response.successful) {
 				alert(response.errorDetail);
 			}
-		}).finally(() => {
-			setLoading(false)
 			props.setShowAddContentModal()
-		});
+		}).catch(err => {
+			alert("Could not create content.")
+		}).finally(() => setLoading(false));
 	}
 
 	return <Modal open={props.showAddContentModal} onCancel={props.setShowAddContentModal} footer={null}>
@@ -52,6 +53,10 @@ const AddContentModal: FC<AddContentModalProps> = (props: AddContentModalProps):
 			<Form.Item label={"Privacy Level"} name="visibilityLevel"
 			           rules={[{required: true, message: "Please select privacy level."}]}>
 				<Select options={options}/>
+			</Form.Item>
+			<Form.Item label={"Tags"} name="tags">
+				{/* @ts-ignore */}
+				<TagSelect/>
 			</Form.Item>
 			<Form.Item wrapperCol={{offset: 11}}>
 				<Button type="primary" htmlType="submit" loading={loading}>

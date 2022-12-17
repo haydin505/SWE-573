@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import static com.infrasave.service.Utils.mapCreatorToUserDTO;
 import static java.util.Collections.emptyList;
@@ -131,18 +132,26 @@ public class ContentService {
     LocalDateTime now = LocalDateTime.now();
     content.setCreatedAt(now);
     content.setLastUpdatedAt(now);
-    List<Tag> tags = tagService.getTagsByIds(tagIds);
-    if (tags.size() != tagIds.size()) {
-      List<Long> foundTagIds = tags.stream().map(Tag::getId).toList();
-      Long unknownId = tagIds.stream().filter(id -> !foundTagIds.contains(id)).findAny().orElse(null);
-      LOGGER.warn("Unknown id found: {}.", unknownId);
-    }
-    content.setTags(new HashSet<>(tags));
+    addTag(tagIds, content);
     contentRepository.save(content);
   }
 
+  private void addTag(List<Long> tagIds, Content content) {
+    if (!ObjectUtils.isEmpty(tagIds)) {
+      List<Tag> tags = tagService.getTagsByIds(tagIds);
+      if (tags.size() != tagIds.size()) {
+        List<Long> foundTagIds = tags.stream().map(Tag::getId).toList();
+        Long unknownId = tagIds.stream().filter(id -> !foundTagIds.contains(id)).findAny().orElse(null);
+        LOGGER.warn("Unknown id found: {}.", unknownId);
+      }
+      content.setTags(new HashSet<>(tags));
+    } else {
+      content.setTags(new HashSet<>());
+    }
+  }
+
   public void modifyContent(Long contentId, VisibilityLevel visibilityLevel, String title, String url, String imageUrl,
-                            String description) {
+                            String description, List<Long> tagIds) {
     Content content = contentRepository.findById(contentId).orElseThrow();
     User creatorUser = content.getCreatorId();
     CustomUserDetails principal = getPrincipal();
@@ -156,6 +165,7 @@ public class ContentService {
     content.setUrl(url);
     content.setImageUrl(imageUrl);
     content.setDescription(description);
+    addTag(tagIds, content);
     contentRepository.save(content);
   }
 

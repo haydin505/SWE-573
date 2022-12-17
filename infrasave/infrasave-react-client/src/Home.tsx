@@ -10,10 +10,11 @@ import EditContentModal from "./EditContentModal";
 import axiosInstance from "./customAxios";
 import {DeleteOutlined, EditOutlined, HeartFilled, HeartOutlined} from "@ant-design/icons";
 import {Link} from "react-router-dom";
+import {formatDate} from "./utils/util";
 
 const Home: React.FC = () => {
 	const [loading, setLoading] = useState(false);
-	const [contents, setContents] = useState([]);
+	const [contents, setContents] = useState<Content[]>([]);
 	const [showAddContentModal, setShowAddContentModal] = useState(false);
 	const [showEditContentModal, setShowEditContentModal] = useState(false);
 	const [currentContent, setCurrentContent] = useState<Content | null>(null);
@@ -67,13 +68,21 @@ const Home: React.FC = () => {
 			const response: Response = res.data;
 			if (!response.successful) {
 				alert(response.errorDetail);
+				return;
 			}
+			const filteredContents = contents.map((c: Content) => {
+				if (c.id === content.id) {
+					c.myContent = true;
+				}
+				return c;
+			});
+			setContents(filteredContents);
 		}).catch(res => {
 			console.log(res);
 			const data: Response = res.response.data;
 			alert(
 				data.violations.map(violation => violation && violation.field ? violation.field + " " + violation.cause : ""));
-		}).finally(() => getMyFeed());
+		});
 	}
 
 	const onClickDeleteMyContent = (content: Content) => {
@@ -81,13 +90,21 @@ const Home: React.FC = () => {
 			const response: Response = res.data;
 			if (!response.successful) {
 				alert(response.errorDetail);
+				return;
 			}
+			const filteredContents = contents.map((c: Content) => {
+				if (c.id === content.id) {
+					c.myContent = false;
+				}
+				return c;
+			});
+			setContents(filteredContents);
 		}).catch(res => {
 			console.log(res);
 			const data: Response = res.response.data;
 			alert(
 				data.violations.map(violation => violation && violation.field ? violation.field + " " + violation.cause : ""));
-		}).finally(() => getMyFeed());
+		});
 	}
 
 	return <div className="site-card-border-less-wrapper">
@@ -96,10 +113,10 @@ const Home: React.FC = () => {
 			background: '#ececec'
 		}}>
 			{authenticated && <Space>
-        <Button size='middle' type="primary" htmlType="submit" onClick={addContent}>
-          Add Content
-        </Button>
-      </Space>}
+				<Button size='middle' type="primary" htmlType="submit" onClick={addContent}>
+					Add Content
+				</Button>
+			</Space>}
 			<AddContentModal showAddContentModal={showAddContentModal} setShowAddContentModal={addContent}/>
 			<EditContentModal content={currentContent} showEditContentModal={showEditContentModal}
 			                  setShowEditContentModal={showEditContent}/>
@@ -147,13 +164,19 @@ const Home: React.FC = () => {
 							<p>{content.description}</p>
 						</Descriptions.Item>
 						{content.imageUrl && <Descriptions.Item span={3}>
-              <Image width={450} src={content.imageUrl}/>
-            </Descriptions.Item>}
+							<Image style={{width: '100%'}} src={content.imageUrl}/>
+						</Descriptions.Item>}
 						{content.tags && content.tags.length > 0 && <Descriptions.Item span={3} label={"Tags"}>
 							{content.tags.map(tag => {
 								return <Popover content={tag.description}><Tag color={tag.color}>{tag.name}</Tag></Popover>
 							})}
-            </Descriptions.Item>}
+						</Descriptions.Item>}
+						<Descriptions.Item span={0} label="Created At">
+							<p>{formatDate(content.createdAt, 'YYYY-MM-DD HH:mm')}</p>
+						</Descriptions.Item>
+						<Descriptions.Item span={0} label="Last Updated At">
+							<p>{formatDate(content.lastUpdatedAt, 'YYYY-MM-DD HH:mm')}</p>
+						</Descriptions.Item>
 					</Descriptions>
 					<Row>
 						<Anchor>
