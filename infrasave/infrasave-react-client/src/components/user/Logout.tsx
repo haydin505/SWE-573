@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../redux/store";
-import {logout} from "../redux/authenticationReducer";
+import {RootState} from "../../redux/store";
+import {logout} from "../../redux/authenticationReducer";
 import {useNavigate} from "react-router-dom";
-import axiosInstance from "../customAxios";
+import axiosInstance from "../../config/customAxios";
 
 const Logout = () => {
 	const dispatch = useDispatch();

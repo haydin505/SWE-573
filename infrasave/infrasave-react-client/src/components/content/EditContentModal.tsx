@@ -1,15 +1,16 @@
 import {FC, useState} from "react";
 import {Button, Form, Input, Modal, Select} from "antd";
-import {Content, VisibilityLevel} from "./types/types";
+import {Content, VisibilityLevel} from "../../types/types";
 import TextArea from "antd/es/input/TextArea";
-import {Response} from "./types/response"
+import {Response} from "../../types/response"
 import {enum2Options} from 'antd-utils'
-import axiosInstance from "./customAxios";
-import TagSelect from "./components/tag/TagSelect";
+import axiosInstance from "../../config/customAxios";
+import TagSelect from "../tag/TagSelect";
 
 interface EditContentModalProps {
 	showEditContentModal: boolean;
 	setShowEditContentModal: () => void;
+	onEditContentComplete:(content: Content) => void;
 	content: Content | null;
 }
 
@@ -26,6 +27,7 @@ const EditContentModal: FC<EditContentModalProps> = (props: EditContentModalProp
 			if (!response.successful) {
 				alert(response.errorDetail);
 			} else {
+				props.onEditContentComplete(content);
 				props.setShowEditContentModal();
 			}
 		}).catch(res => {

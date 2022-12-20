@@ -3,7 +3,7 @@ package com.infrasave.controller;
 import com.infrasave.bean.AddMyContentRequest;
 import com.infrasave.bean.AppResponse;
 import com.infrasave.bean.AppResponses;
-import com.infrasave.bean.MyContentDTO;
+import com.infrasave.bean.ContentDTO;
 import com.infrasave.service.MyContentService;
 import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,8 +29,8 @@ public class MyContentController {
   }
 
   @GetMapping
-  public List<MyContentDTO> getMyContent() {
-    return myContentService.getMyContent();
+  public AppResponse<List<ContentDTO>> getMyContent() {
+    return AppResponses.successful(myContentService.getMyContent());
   }
 
   @PostMapping

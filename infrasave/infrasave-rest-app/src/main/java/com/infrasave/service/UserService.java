@@ -10,6 +10,7 @@ import com.infrasave.entity.User;
 import com.infrasave.enums.FriendRequestStatus;
 import com.infrasave.enums.VisibilityLevel;
 import com.infrasave.repository.user.UserRepository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import static com.infrasave.service.Utils.mapCreatorToUserDTO;
+import static java.util.Objects.nonNull;
 
 /**
  * @author huseyinaydin
@@ -78,5 +80,34 @@ public class UserService {
                        null, null, visibleContents, friendList.size(),
                        friendIdList.contains(principal.getUserId()) ? FriendRequestStatus.APPROVED
                            : FriendRequestStatus.NONE);
+  }
+
+  public void updateUser(Long userId, String name, String surname, String username, String email,
+                         LocalDateTime birthDate) {
+    User user = getUserById(userId);
+    boolean updated = false;
+    if (nonNull(name)) {
+      user.setName(name);
+      updated = true;
+    }
+    if (nonNull(surname)) {
+      user.setSurname(surname);
+      updated = true;
+    }
+    if (nonNull(username)) {
+      user.setUsername(username);
+      updated = true;
+    }
+    if (nonNull(email)) {
+      user.setEmail(email);
+      updated = true;
+    }
+    if (nonNull(birthDate)) {
+      user.setBirthDate(birthDate);
+      updated = true;
+    }
+    if (updated) {
+      userRepository.save(user);
+    }
   }
 }

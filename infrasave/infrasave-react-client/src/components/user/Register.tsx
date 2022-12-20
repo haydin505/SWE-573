@@ -1,11 +1,11 @@
 import {Button, Card, DatePicker, Form, Input, Layout} from 'antd';
 import React, {useEffect} from 'react';
-import {RegisterRequest} from "../types/requests";
+import {RegisterRequest} from "../../types/requests";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../redux/store";
+import {RootState} from "../../redux/store";
 import {useNavigate} from "react-router-dom";
 import {Content} from "antd/es/layout/layout";
-import axiosInstance from "../customAxios";
+import axiosInstance from "../../config/customAxios";
 
 const Register: React.FC = () => {
 	const onFinish = (values: any) => {
