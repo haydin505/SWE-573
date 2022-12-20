@@ -2,7 +2,7 @@ import * as React from "react";
 import {FC, useEffect, useState} from "react";
 import {Button, Select, Tag} from "antd";
 import {TagDTO} from "../../types/types";
-import customAxios from "../../customAxios";
+import customAxios from "../../config/customAxios";
 import {Response} from "../../types/response";
 import CreateTagModal from "./CreateTagModal";
 

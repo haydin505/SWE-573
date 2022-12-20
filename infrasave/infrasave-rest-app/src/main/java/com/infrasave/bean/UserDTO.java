@@ -27,6 +27,8 @@ public class UserDTO {
 
   private FriendRequestStatus friendRequestStatus;
 
+  private List<UserDTO> friends;
+
   public UserDTO() {
   }
 
@@ -120,5 +122,13 @@ public class UserDTO {
 
   public void setFriendRequestStatus(FriendRequestStatus friendRequestStatus) {
     this.friendRequestStatus = friendRequestStatus;
+  }
+
+  public List<UserDTO> getFriends() {
+    return friends;
+  }
+
+  public void setFriends(List<UserDTO> friends) {
+    this.friends = friends;
   }
 }

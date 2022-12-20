@@ -1,12 +1,12 @@
 import React, {useState} from "react";
 import {Anchor, Checkbox, Input, Layout, Popover, Table, Tabs, Tag} from "antd";
-import customAxios from "./customAxios";
-import axiosInstance from "./customAxios";
-import {Response} from "./types/response";
+import customAxios from "../../config/customAxios";
+import axiosInstance from "../../config/customAxios";
+import {Response} from "../../types/response";
 import {CheckboxValueType} from "antd/es/checkbox/Group";
-import {Content, FriendRequestStatus, Search, UserDTO} from "./types/types";
+import {Content, FriendRequestStatus, Search, UserDTO} from "../../types/types";
 import {Link} from "react-router-dom";
-import {formatDate} from "./utils/util";
+import {formatDate} from "../../utils/util";
 import {HeartFilled, HeartOutlined} from "@ant-design/icons";
 
 const SearchPage: React.FC = (): JSX.Element => {

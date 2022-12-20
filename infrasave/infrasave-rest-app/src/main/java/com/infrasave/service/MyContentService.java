@@ -1,17 +1,15 @@
 package com.infrasave.service;
 
 import com.infrasave.bean.AddMyContentRequest;
-import com.infrasave.bean.MyContentDTO;
-import com.infrasave.config.CustomUserDetails;
+import com.infrasave.bean.ContentDTO;
+import com.infrasave.bean.TagDTO;
 import com.infrasave.entity.Content;
 import com.infrasave.entity.MyContent;
 import com.infrasave.entity.User;
+import com.infrasave.enums.VisibilityLevel;
 import com.infrasave.repository.mycontent.MyContentRepository;
-import com.infrasave.repository.user.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import static com.infrasave.service.Utils.mapCreatorToUserDTO;
@@ -24,39 +22,38 @@ public class MyContentService {
 
   private final MyContentRepository myContentRepository;
 
-  private final UserRepository userRepository;
-
   private final UserService userService;
 
   private final ContentService contentService;
 
-  public MyContentService(MyContentRepository myContentRepository, UserRepository userRepository,
-                          UserService userService, ContentService contentService) {
+  private final TagService tagService;
+
+  public MyContentService(MyContentRepository myContentRepository,
+                          UserService userService,
+                          ContentService contentService, TagService tagService) {
     this.myContentRepository = myContentRepository;
-    this.userRepository = userRepository;
     this.userService = userService;
     this.contentService = contentService;
+    this.tagService = tagService;
   }
 
-  public List<MyContentDTO> getMyContent() {
-    User user = getCurrentUser();
-    List<MyContent> myContents = myContentRepository.getMyContent(user);
+  public List<ContentDTO> getMyContent() {
+    User currentUser = userService.getCurrentUser();
+    List<MyContent> myContents = myContentRepository.getMyContent(currentUser);
     return myContents.stream()
-                     .map(myContent -> new MyContentDTO(myContent,
-                                                        mapCreatorToUserDTO(myContent.getContent().getCreatorId())))
+                     .filter(myContent -> myContent.getContent().getCreatorId().getId().equals(currentUser.getId())
+                                          || !VisibilityLevel.PRIVATE.equals(
+                         myContent.getContent().getVisibilityLevel()))
+                     .map(myContent -> new ContentDTO(myContent.getContent(),
+                                                      Boolean.TRUE,
+                                                      mapCreatorToUserDTO(myContent.getContent().getCreatorId()),
+                                                      myContent.getContent().getTags().stream().map(
+                                                          TagDTO::new).toList()))
                      .toList();
   }
 
-  private User getCurrentUser() {
-    CustomUserDetails principal =
-        (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    Long userId = principal.getUserId();
-    Optional<User> userOptional = userRepository.findById(userId);
-    return userOptional.orElseThrow();
-  }
-
   public void addMyContent(AddMyContentRequest request) {
-    User user = getCurrentUser();
+    User user = userService.getCurrentUser();
     MyContent myContent = new MyContent();
     Content content = contentService.getContentById(request.contentId());
     myContent.setContent(content);
@@ -68,7 +65,7 @@ public class MyContentService {
   }
 
   public void deleteMyContent(Long contentId) {
-    User user = getCurrentUser();
+    User user = userService.getCurrentUser();
     Content content = contentService.getContentById(contentId);
     MyContent myContent = myContentRepository.getMyContentByUserAndContent(user, content);
     myContentRepository.delete(myContent);

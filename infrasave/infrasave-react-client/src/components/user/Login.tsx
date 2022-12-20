@@ -1,12 +1,12 @@
 import {Button, Card, Form, Input, Layout} from 'antd';
 import React, {useEffect, useState} from 'react';
-import {LoginRequest} from "../types/requests";
+import {LoginRequest} from "../../types/requests";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../redux/store";
-import {authenticateFail, authenticateSuccess} from "../redux/authenticationReducer";
+import {RootState} from "../../redux/store";
+import {authenticateFail, authenticateSuccess} from "../../redux/authenticationReducer";
 import {useNavigate} from "react-router-dom";
 import {Content} from "antd/es/layout/layout";
-import axiosInstance from "../customAxios";
+import axiosInstance from "../../config/customAxios";
 
 const Login: React.FC = () => {
 

@@ -3,7 +3,6 @@ package com.infrasave.controller;
 import com.infrasave.bean.AppResponse;
 import com.infrasave.bean.AppResponses;
 import com.infrasave.bean.ContentDTO;
-import com.infrasave.bean.MyContentDTO;
 import com.infrasave.bean.SearchResponseDTO;
 import com.infrasave.bean.TagDTO;
 import com.infrasave.bean.UserDTO;
@@ -62,7 +61,7 @@ public class SearchController {
                                                                            .getAuthentication()
                                                                            .getPrincipal();
     Long userId = principal.getUserId();
-    List<Long> myContentContentIds = myContentService.getMyContent().stream().map(MyContentDTO::contentId).toList();
+    List<Long> myContentContentIds = myContentService.getMyContent().stream().map(ContentDTO::id).toList();
     List<ContentDTO> contentDTOs = contents.stream()
                                            .map(c -> new ContentDTO(c,
                                                                     myContentContentIds.contains(c.getId()),

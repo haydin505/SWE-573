@@ -2,7 +2,7 @@ import {FC, useState} from "react";
 import {Button, Form, Input, Modal} from "antd";
 import {ColorResult, SketchPicker} from "react-color";
 import TextArea from "antd/es/input/TextArea";
-import customAxios from "../../customAxios";
+import customAxios from "../../config/customAxios";
 import {Response} from "../../types/response";
 
 interface CreateTagModalProps {
