@@ -5,16 +5,21 @@ import {Content} from "./types/types";
 import {useSelector} from "react-redux";
 import {RootState} from "./redux/store";
 import axiosInstance from "./config/customAxios";
-import ContentModule from "./components/content/Content";
+import ContentModule from "./components/content/ContentModule";
 
 const Home: React.FC = () => {
 	const [loading, setLoading] = useState(false);
 	const [contents, setContents] = useState<Content[]>([]);
 	const user = useSelector((state: RootState) => state.authentication.user);
+	const authenticated = useSelector((state: RootState) => state.authentication.authenticated);
 
 	useEffect(() => {
 		getMyFeed();
 	}, [])
+
+	useEffect(() => {
+		getMyFeed();
+	}, [authenticated])
 
 	const getMyFeed = () => {
 		setLoading(true);
@@ -24,7 +29,11 @@ const Home: React.FC = () => {
 		}).finally(() => setLoading(false));
 	}
 
-	return <ContentModule contents={contents} user={user} reloadContent={getMyFeed} enableAddContent={true}/>
+	console.log("authenticated", authenticated);
+	console.log("contents", contents);
+	console.log("user", user);
+
+	return <ContentModule contents={contents} user={user} reloadContent={getMyFeed} enableAddContent={true} loading={loading}/>
 }
 
 export default Home;

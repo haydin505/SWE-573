@@ -19,16 +19,17 @@ interface ContentModuleProps {
 
 	reloadContent(): any;
 
+	loading: boolean;
 }
 
 const ContentModule: FC<ContentModuleProps> = (props): JSX.Element => {
 	const user = useSelector((state: RootState) => state.authentication.user);
 	const authenticated = useSelector((state: RootState) => state.authentication.authenticated);
-	const [loading, setLoading] = useState(false);
 	const [contents, setContents] = useState<Content[]>([]);
 	const [showAddContentModal, setShowAddContentModal] = useState(false);
 	const [showEditContentModal, setShowEditContentModal] = useState(false);
 	const [currentContent, setCurrentContent] = useState<Content | null>(null);
+	const {loading} = props;
 
 	useEffect(() => {
 		props.reloadContent();
@@ -143,8 +144,6 @@ const ContentModule: FC<ContentModuleProps> = (props): JSX.Element => {
 			{loading ? (<Spin tip="Loading" size="large">
 				<div className="content"/>
 			</Spin>) : (user && contents.length > 0 ? contents.map((content: Content) => {
-				console.log(user);
-				console.log(content?.creatorUser?.userId);
 				return (<Card className="content" style={{maxWidth: '900px', padding: 0}}>
 					< Row style={{marginBottom: 5}}>
 						{user && content.creatorUser.userId === user.userId ?

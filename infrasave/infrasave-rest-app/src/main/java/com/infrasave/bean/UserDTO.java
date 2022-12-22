@@ -1,7 +1,7 @@
 package com.infrasave.bean;
 
 import com.infrasave.entity.User;
-import com.infrasave.enums.FriendRequestStatus;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -19,30 +19,35 @@ public class UserDTO {
 
   private String email;
 
+  private LocalDateTime birthDate;
+
   private List<ContentDTO> createdContents;
 
   private List<String> roles;
 
   private Integer friendCount;
 
-  private FriendRequestStatus friendRequestStatus;
-
   private List<UserDTO> friends;
+
+  private FriendDTO friendDTO;
 
   public UserDTO() {
   }
 
-  public UserDTO(String username, Long userId, String name, String surname, String email, List<String> roles,
-                 List<ContentDTO> createdContents, Integer friendCount, FriendRequestStatus friendRequestStatus) {
+  public UserDTO(String username, Long userId, String name, String surname, LocalDateTime birthDate, String email,
+                 List<String> roles, List<ContentDTO> createdContents, List<UserDTO> friends, Integer friendCount,
+                 FriendDTO friendDTO) {
     this.username = username;
     this.userId = userId;
     this.name = name;
     this.surname = surname;
+    this.birthDate = birthDate;
     this.email = email;
     this.roles = roles;
     this.createdContents = createdContents;
+    this.friends = friends;
     this.friendCount = friendCount;
-    this.friendRequestStatus = friendRequestStatus;
+    this.friendDTO = friendDTO;
   }
 
   public UserDTO(User user) {
@@ -58,14 +63,6 @@ public class UserDTO {
 
   public void setUsername(String username) {
     this.username = username;
-  }
-
-  public Integer getFriendCount() {
-    return friendCount;
-  }
-
-  public void setFriendCount(Integer friendCount) {
-    this.friendCount = friendCount;
   }
 
   public Long getUserId() {
@@ -100,6 +97,14 @@ public class UserDTO {
     this.email = email;
   }
 
+  public LocalDateTime getBirthDate() {
+    return birthDate;
+  }
+
+  public void setBirthDate(LocalDateTime birthDate) {
+    this.birthDate = birthDate;
+  }
+
   public List<ContentDTO> getCreatedContents() {
     return createdContents;
   }
@@ -116,12 +121,12 @@ public class UserDTO {
     this.roles = roles;
   }
 
-  public FriendRequestStatus getFriendRequestStatus() {
-    return friendRequestStatus;
+  public Integer getFriendCount() {
+    return friendCount;
   }
 
-  public void setFriendRequestStatus(FriendRequestStatus friendRequestStatus) {
-    this.friendRequestStatus = friendRequestStatus;
+  public void setFriendCount(Integer friendCount) {
+    this.friendCount = friendCount;
   }
 
   public List<UserDTO> getFriends() {
@@ -130,5 +135,13 @@ public class UserDTO {
 
   public void setFriends(List<UserDTO> friends) {
     this.friends = friends;
+  }
+
+  public FriendDTO getFriendDTO() {
+    return friendDTO;
+  }
+
+  public void setFriendDTO(FriendDTO friendDTO) {
+    this.friendDTO = friendDTO;
   }
 }

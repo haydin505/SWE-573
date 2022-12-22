@@ -7,7 +7,6 @@ import com.infrasave.bean.TagDTO;
 import com.infrasave.bean.UpdateUserRequest;
 import com.infrasave.bean.UserDTO;
 import com.infrasave.config.CustomUserDetails;
-import com.infrasave.entity.MyContent;
 import com.infrasave.entity.User;
 import com.infrasave.entity.UserRole;
 import com.infrasave.service.FriendService;
@@ -44,8 +43,8 @@ public class UserController {
 
   @GetMapping("/{id}")
   @ApiOperation("Get user page information")
-  public UserDTO getUser(@PathVariable Long id) {
-    return userService.getUserDTOByContent(id);
+  public AppResponse<UserDTO> getUser(@PathVariable Long id) {
+    return AppResponses.successful(userService.getUserDTO(id));
   }
 
   @GetMapping("/current")
@@ -69,7 +68,7 @@ public class UserController {
       List<TagDTO> tags = content.getTags().stream().map(TagDTO::new).toList();
       return new ContentDTO(content, myContentIds.contains(content.getId()), new UserDTO(user), tags);
     }).toList());
-    List<User> friends = friendService.getFriendList(user);
+    List<User> friends = friendService.getApprovedFriendList(user);
     userDTO.setFriends(friends.stream().map(UserDTO::new).toList());
     userDTO.setFriendCount(friends.size());
     return ResponseEntity.ok(userDTO);

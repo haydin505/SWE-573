@@ -1,16 +1,18 @@
 package com.infrasave.service;
 
+import com.infrasave.bean.FriendDTO;
 import com.infrasave.bean.UserDTO;
 import com.infrasave.config.CustomUserDetails;
 import com.infrasave.entity.Content;
+import com.infrasave.entity.Friend;
 import com.infrasave.entity.User;
-import com.infrasave.enums.FriendRequestStatus;
 import com.infrasave.enums.VisibilityLevel;
 import com.infrasave.repository.content.ContentRepository;
 import com.infrasave.repository.tag.TagRepository;
 import com.infrasave.repository.user.UserRepository;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -59,13 +61,22 @@ public class SearchService {
     List<String> names = getParameters(query);
     List<User> users = userRepository.getUsersByNameAndSurname(names);
     Long currentUserId = getCurrentUserId();
-    User user = userRepository.findById(currentUserId).orElseThrow();
-    List<User> currentUserFriendList = friendService.getFriendList(user);
-    List<Long> currentUserFriendIdList = currentUserFriendList.stream().map(User::getId).toList();
+    User currentUser = userRepository.findById(currentUserId).orElseThrow();
+    List<Friend> friendEntities = friendService.getFriendEntities(currentUser);
     return users.stream().map(u -> {
       UserDTO userDTO = new UserDTO(u);
-      userDTO.setFriendRequestStatus(
-          currentUserFriendIdList.contains(u.getId()) ? FriendRequestStatus.APPROVED : FriendRequestStatus.NONE);
+      Optional<Friend> friendOptional = friendEntities
+          .stream()
+          .filter(f ->
+                      (f.getRequestee().getId().equals(currentUser.getId()) && f.getRequester()
+                                                                                .getId()
+                                                                                .equals(u.getId())) ||
+                      (f.getRequestee().getId().equals(u.getId()) || f.getRequester()
+                                                                      .getId()
+                                                                      .equals(currentUser.getId())))
+          .findFirst();
+      FriendDTO friendDTO = friendOptional.map(FriendDTO::new).orElse(null);
+      userDTO.setFriendDTO(friendDTO);
       return userDTO;
     }).toList();
   }
@@ -94,7 +105,7 @@ public class SearchService {
       if (content.getVisibilityLevel().equals(VisibilityLevel.FRIENDS)) {
         Long currentUserId = getCurrentUserId();
         User user = content.getCreatorId();
-        List<Long> friendList = friendService.getFriendList(user).stream().map(User::getId).toList();
+        List<Long> friendList = friendService.getApprovedFriendList(user).stream().map(User::getId).toList();
         return friendList.contains(currentUserId);
       }
       return false;
