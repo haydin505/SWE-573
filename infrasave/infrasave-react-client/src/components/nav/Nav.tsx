@@ -22,8 +22,8 @@ const Nav: React.FC = (): JSX.Element => {
 				{authenticated ? null : <Menu.Item title="Register">Register<Link to={"/register"}/></Menu.Item>}
 				{authenticated ? <Menu.Item title="Search" icon={<SearchOutlined/>}>Search<Link
 					to={"/search"}/></Menu.Item> : null}
-				{authenticated ? <Menu.Item title="My Contents" icon={<HeartOutlined/>}>My Content<Link
-					to={"/my-content"}/></Menu.Item> : null}
+				{authenticated ? <Menu.Item title="Liked Contents" icon={<HeartOutlined/>}>Liked Contents<Link
+					to={"/liked-content"}/></Menu.Item> : null}
 				{authenticated ? <Menu.Item title="Profile" icon={<UserOutlined/>}>Profile<Link
 					to={"/profile"}/></Menu.Item> : null}
 				{authenticated ? <Menu.Item title="Logout">Logout<Link to={"/logout"}/></Menu.Item> : null}

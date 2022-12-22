@@ -10,6 +10,7 @@ import javax.validation.constraints.PastOrPresent;
  */
 public record RegisterRequest(@NotBlank String name,
                               @NotBlank String surname,
+                              @NotBlank String username,
                               @NotBlank String email,
                               @NotBlank String password,
                               @NotBlank String phoneNumber,

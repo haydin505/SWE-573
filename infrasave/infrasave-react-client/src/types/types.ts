@@ -40,7 +40,16 @@ export interface UserDTO {
 	birthDate: Date;
 	createdContents: Content[];
 	friendCount: number;
-	friendRequestStatus: string;
+	friends: UserDTO[];
+	friendDTO?: FriendDTO;
+}
+
+export interface FriendDTO {
+	id: number,
+	requesteeId: number,
+	requesterId: number,
+	friendRequestStatus: string,
+	requesterDetail: UserDTO
 }
 
 export enum FriendRequestStatus {

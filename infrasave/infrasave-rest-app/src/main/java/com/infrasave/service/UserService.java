@@ -1,10 +1,12 @@
 package com.infrasave.service;
 
 import com.infrasave.bean.ContentDTO;
+import com.infrasave.bean.FriendDTO;
 import com.infrasave.bean.TagDTO;
 import com.infrasave.bean.UserDTO;
 import com.infrasave.config.CustomUserDetails;
 import com.infrasave.entity.Content;
+import com.infrasave.entity.Friend;
 import com.infrasave.entity.Tag;
 import com.infrasave.entity.User;
 import com.infrasave.enums.FriendRequestStatus;
@@ -49,9 +51,9 @@ public class UserService {
     return user;
   }
 
-  public UserDTO getUserDTOByContent(Long id) {
+  public UserDTO getUserDTO(Long id) {
     User creatorUser = getUserById(id);
-    List<User> friendList = friendService.getFriendList(creatorUser);
+    List<User> friendList = friendService.getApprovedFriendList(creatorUser);
     List<Long> friendIdList = friendList.stream().map(User::getId).toList();
     List<Content> createdContents = creatorUser.getCreatedContents();
     List<ContentDTO> visibleContents = new ArrayList<>();
@@ -76,10 +78,35 @@ public class UserService {
         }
       }
     });
-    return new UserDTO(creatorUser.getUsername(), creatorUser.getId(), creatorUser.getName(), creatorUser.getSurname(),
-                       null, null, visibleContents, friendList.size(),
-                       friendIdList.contains(principal.getUserId()) ? FriendRequestStatus.APPROVED
-                           : FriendRequestStatus.NONE);
+    User currentUser = getCurrentUser();
+    List<Friend> friendEntities = friendService.getFriendEntities(currentUser);
+    Optional<Friend> friendOptional = friendEntities
+        .stream()
+        .filter(f ->
+                    (f.getRequestee().getId().equals(currentUser.getId()) && f.getRequester()
+                                                                              .getId()
+                                                                              .equals(creatorUser.getId())) ||
+                    (f.getRequestee().getId().equals(creatorUser.getId()) || f.getRequester()
+                                                                              .getId()
+                                                                              .equals(currentUser.getId())))
+        .findFirst();
+    FriendDTO friendDTO = friendOptional.map(FriendDTO::new).orElse(new FriendDTO(null,
+                                                                                  creatorUser.getId(),
+                                                                                  null,
+                                                                                  FriendRequestStatus.NONE,
+                                                                                  new UserDTO(currentUser)));
+    List<UserDTO> friends = friendList.stream().map(UserDTO::new).toList();
+    return new UserDTO(creatorUser.getUsername(),
+                       creatorUser.getId(),
+                       creatorUser.getName(),
+                       creatorUser.getSurname(),
+                       creatorUser.getBirthDate(),
+                       null,
+                       null,
+                       visibleContents,
+                       friends,
+                       friendList.size(),
+                       friendDTO);
   }
 
   public void updateUser(Long userId, String name, String surname, String username, String email,

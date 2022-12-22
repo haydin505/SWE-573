@@ -13,6 +13,7 @@ const Register: React.FC = () => {
 			name: values.name,
 			surname: values.surname,
 			email: values.email,
+			username: values.username,
 			password: values.password,
 			phoneNumber: values.phoneNumber,
 			birthDate: values.birthDate
@@ -78,6 +79,13 @@ const Register: React.FC = () => {
 								label="Surname"
 								name="surname"
 								rules={[{required: true, message: 'Please enter your surname!'}]}
+							>
+								<Input/>
+							</Form.Item>
+							<Form.Item
+								label="Username"
+								name="username"
+								rules={[{required: true, message: 'Please enter your username!'}]}
 							>
 								<Input/>
 							</Form.Item>

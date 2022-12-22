@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Anchor, Checkbox, Input, Layout, Popover, Table, Tabs, Tag} from "antd";
+import {Anchor, Checkbox, Input, Layout, Popover, Spin, Table, Tabs, Tag} from "antd";
 import customAxios from "../../config/customAxios";
 import axiosInstance from "../../config/customAxios";
 import {Response} from "../../types/response";
@@ -13,7 +13,9 @@ const SearchPage: React.FC = (): JSX.Element => {
 	const options = [{label: "User", value: "user"}, {label: "Content", value: "content"}, {label: "Tag", value: "tag"}];
 	const [checkedValues, setCheckedValues] = useState<CheckboxValueType[]>(['user', 'content', 'tag']);
 	const [search, setSearch] = useState<Search | undefined>(undefined);
+	const [loading, setLoading] = useState(false);
 	const onSearch = (data: string) => {
+		setLoading(true);
 		const obj: any = {
 			query: data
 		};
@@ -24,12 +26,14 @@ const SearchPage: React.FC = (): JSX.Element => {
 			console.log(res.data);
 			const response: Response = res.data;
 			if (!response.successful) {
-
+				alert("Search couldn't complete successfully");
 			}
 			const search: Search = response.data;
 			console.log(search);
 			setSearch(search);
-		})
+		}).catch(err => {
+			alert("Search couldn't complete successfully");
+		}).finally(() => setLoading(false));
 	}
 
 	const changeMyContentStatus = (content: Content) => {
@@ -196,17 +200,17 @@ const SearchPage: React.FC = (): JSX.Element => {
 				{
 					label: `User (${search?.users?.length || 0})`,
 					key: '1',
-					children: <Table dataSource={search?.users} columns={userColumns}/>,
+					children: loading ? <Spin/> : <Table dataSource={search?.users} columns={userColumns}/>,
 				},
 				{
 					label: `Content (${search?.contents?.length || 0})`,
 					key: '2',
-					children: <Table dataSource={search?.contents} columns={contentColumns}/>,
+					children: loading ? <Spin/> : <Table dataSource={search?.contents} columns={contentColumns}/>,
 				},
 				{
 					label: `Content By Tag  (${search?.contentsByTags?.length || 0})`,
 					key: '3',
-					children: <Table dataSource={search?.contentsByTags} columns={contentColumns}/>,
+					children: loading ? <Spin/> : <Table dataSource={search?.contentsByTags} columns={contentColumns}/>,
 				},
 			]}
 		/>

@@ -7,6 +7,7 @@ import {authenticateFail, authenticateSuccess} from "../../redux/authenticationR
 import {useNavigate} from "react-router-dom";
 import {Content} from "antd/es/layout/layout";
 import axiosInstance from "../../config/customAxios";
+import {Response} from "../../types/response";
 
 const Login: React.FC = () => {
 
@@ -19,11 +20,16 @@ const Login: React.FC = () => {
 		setLoading(true);
 		axiosInstance.post("/login", loginRequest, {withCredentials: true}).then(
 			response => {
-				if (response.status === 200) {
+				const res: Response = response.data;
+				if (res.successful) {
 					dispatch(authenticateSuccess());
 					localStorage.setItem("authenticated", "true");
+				} else {
+					dispatch(authenticateFail());
+					alert("Error title: " + res.errorTitle + " Error description: " + res.errorDetail);
 				}
 			}).catch(response => {
+			alert("Couldn't login.")
 			dispatch(authenticateFail());
 		}).finally(() => setLoading(false));
 	};

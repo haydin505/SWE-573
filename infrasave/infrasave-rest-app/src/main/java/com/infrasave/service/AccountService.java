@@ -43,6 +43,7 @@ public class AccountService {
     user.setPassword(passwordEncoder.encode(request.password()));
     user.setName(request.name());
     user.setSurname(request.surname());
+    user.setUsername(request.username());
     user.setEmail(request.email());
     user.setBirthDate(request.birthDate());
     UserRole userRole = new UserRole();
