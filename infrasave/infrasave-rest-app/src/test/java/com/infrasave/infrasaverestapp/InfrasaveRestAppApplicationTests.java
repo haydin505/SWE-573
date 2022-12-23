@@ -17,6 +17,6 @@ public class InfrasaveRestAppApplicationTests {
 
   @Test
   void sendMail() {
-    emailService.sendSimpleMessage("mhnaydin505@gmail.com", "Test", "Test");
+    emailService.sendSimpleMessage("infrasave.app@gmail.com", "Test", "Test");
   }
 }

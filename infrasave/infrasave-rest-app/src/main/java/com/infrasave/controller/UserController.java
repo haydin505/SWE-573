@@ -63,6 +63,7 @@ public class UserController {
     userDTO.setRoles(user.getRoles().stream().map(UserRole::getRole).toList());
     userDTO.setUserId(user.getId());
     userDTO.setUsername(user.getUsername());
+    userDTO.setBirthDate(user.getBirthDate());
     List<Long> myContentIds = user.getMyContents().stream().map(myContent -> myContent.getContent().getId()).toList();
     userDTO.setCreatedContents(user.getCreatedContents().stream().map(content -> {
       List<TagDTO> tags = content.getTags().stream().map(TagDTO::new).toList();

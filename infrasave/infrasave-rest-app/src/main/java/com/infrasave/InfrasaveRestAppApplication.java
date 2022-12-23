@@ -54,7 +54,7 @@ public class InfrasaveRestAppApplication {
       user.setUsername("mehmet600");
       user.setName("Mehmet");
       user.setSurname("Selman");
-      user.setEmail("mhnaydin505@gmail.com");
+      user.setEmail("infrasave.app@gmail.com");
       user.setPassword(passwordEncoder.encode("123456"));
       LocalDateTime now = LocalDateTime.now();
       user.setBirthDate(now);
@@ -132,9 +132,9 @@ public class InfrasaveRestAppApplication {
       friendContent.setTags(new HashSet<>(List.of(financeTag, defaultTag)));
       contentRepository.save(friendContent);
 
-      emailService.sendSimpleMessage("mhnaydin505@gmail.com", "Application Started Successfully!",
+      emailService.sendSimpleMessage("infrasave.app@gmail.com", "Application Started Successfully!",
                                      "Hello, your application started successfully!");
-      //accountService.resetPassword("mhnaydin505@gmail.com");
+      //accountService.resetPassword("infrasave.app@gmail.com");
     };
   }
 }
