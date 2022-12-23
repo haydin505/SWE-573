@@ -57,7 +57,7 @@ public class FriendController {
     return AppResponses.successful();
   }
 
-  @PutMapping("/requests")
+  @PutMapping
   public AppResponse updateFriendRequestStatus(@RequestBody @Validated UpdateFriendRequestStatusRequest request) {
     friendService.updateFriendRequestStatus(request.id(), request.friendRequestStatus());
     return AppResponses.successful();

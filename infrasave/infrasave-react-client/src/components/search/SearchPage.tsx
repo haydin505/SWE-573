@@ -1,20 +1,32 @@
-import React, {useState} from "react";
-import {Anchor, Checkbox, Input, Layout, Popover, Spin, Table, Tabs, Tag} from "antd";
+import React, {useEffect, useState} from "react";
+import {Anchor, Button, Checkbox, Input, Layout, Popover, Spin, Table, Tabs, Tag} from "antd";
 import customAxios from "../../config/customAxios";
 import axiosInstance from "../../config/customAxios";
 import {Response} from "../../types/response";
 import {CheckboxValueType} from "antd/es/checkbox/Group";
-import {Content, FriendRequestStatus, Search, UserDTO} from "../../types/types";
-import {Link} from "react-router-dom";
+import {Content, Search, UserDTO} from "../../types/types";
+import {Link, useSearchParams} from "react-router-dom";
 import {formatDate} from "../../utils/util";
-import {HeartFilled, HeartOutlined} from "@ant-design/icons";
+import {CheckOutlined, ClockCircleOutlined, HeartFilled, HeartOutlined} from "@ant-design/icons";
 
 const SearchPage: React.FC = (): JSX.Element => {
 	const options = [{label: "User", value: "user"}, {label: "Content", value: "content"}, {label: "Tag", value: "tag"}];
 	const [checkedValues, setCheckedValues] = useState<CheckboxValueType[]>(['user', 'content', 'tag']);
 	const [search, setSearch] = useState<Search | undefined>(undefined);
 	const [loading, setLoading] = useState(false);
-	const onSearch = (data: string) => {
+	const [query, setQuery] = useState<string | undefined>(undefined);
+	const [searchParams, setSearchParams] = useSearchParams();
+
+	useEffect(() => {
+		const urlParsedQuery = searchParams.get("query");
+		if (urlParsedQuery) {
+			setQuery(urlParsedQuery)
+			onSearch(urlParsedQuery);
+		}
+	}, [searchParams]);
+
+	const onSearch = (data: string | undefined = query) => {
+		window.history.replaceState(query, "Search", `/search?query=${data}`)
 		setLoading(true);
 		const obj: any = {
 			query: data
@@ -58,6 +70,41 @@ const SearchPage: React.FC = (): JSX.Element => {
 		setCheckedValues(checkedValues);
 	};
 
+	const onAddFriend = async (requesteeId: number | undefined) => {
+		const request = {
+			requesteeId: requesteeId,
+		}
+		try {
+			const res = await axiosInstance.post("/friends", request, {withCredentials: true});
+			const response: Response = res.data;
+			console.log(response);
+			if (!response.successful) {
+				alert("Couldn't add friend.");
+				return;
+			}
+			onSearch();
+		} catch (err) {
+			alert("Couldn't add friend request.");
+		}
+	}
+
+	const onRemoveFriend = async (id: number | undefined) => {
+		if (!id) {
+			return;
+		}
+		try {
+			const res = await axiosInstance.delete(`/friends/${id}`, {withCredentials: true});
+			const response: Response = res.data;
+			console.log(response)
+			if (!response.successful) {
+				alert("Couldn't remove friend.");
+			}
+			onSearch();
+		} catch (err) {
+			alert("Couldn't remove friend.");
+		}
+	}
+
 	const userColumns = [{
 		title: 'Username',
 		dataIndex: 'username',
@@ -76,24 +123,31 @@ const SearchPage: React.FC = (): JSX.Element => {
 			key: 'surname',
 		},
 		{
-			title: 'Friend',
-			dataIndex: 'friendRequestStatus',
+			title: 'Friend Status',
+			dataIndex: ['friendDTO', 'friendRequestStatus'],
 			render: (data: string, record: UserDTO) => {
-				console.log(data);
-				if (!data) {
-					return "";
+				const id = record.friendDTO?.id;
+				const friendRequestStatus = data;
+				const friendButtons = () => {
+					if (friendRequestStatus === 'APPROVED') {
+						return (<>
+							<CheckOutlined/><Button onClick={() => onRemoveFriend(id)} style={{marginLeft: 10}}>Remove
+							Friend</Button>
+						</>)
+					}
+					if (friendRequestStatus === 'PENDING') {
+						return <><ClockCircleOutlined style={{marginRight: 10}}/>Pending</>
+					}
+					if (!friendRequestStatus
+						|| friendRequestStatus
+						=== 'NONE'
+						|| friendRequestStatus
+						=== 'REJECTED') {
+						return <Button onClick={() => onAddFriend(record.userId)}>Add Friend</Button>
+					}
+					return null;
 				}
-				switch (data) {
-					case FriendRequestStatus[FriendRequestStatus.APPROVED]:
-						return "Accepted";
-					case FriendRequestStatus[FriendRequestStatus.PENDING]:
-						return "Pending"
-					case FriendRequestStatus[FriendRequestStatus.REJECTED]:
-					case FriendRequestStatus[FriendRequestStatus.NONE]:
-						return "Send Request";
-					default:
-						return "";
-				}
+				return friendButtons();
 			},
 		}
 	]
@@ -190,7 +244,8 @@ const SearchPage: React.FC = (): JSX.Element => {
 	return (<Layout style={{
 		textAlign: "center", display: "flex", padding: '50px', background: '#ececec'
 	}}>
-		<Input.Search style={{margin: 'auto', width: '50%'}} size={"middle"} bordered onSearch={onSearch}/>
+		<Input.Search style={{margin: 'auto', width: '50%'}} size={"middle"} bordered
+		            value={query}  defaultValue={query} onChange={(data) => setQuery(data.target.value)} onSearch={onSearch}/>
 		<Checkbox.Group options={options} defaultValue={['user', 'content', 'tag']} onChange={onCheckBoxChange}/>
 		<Tabs
 			defaultActiveKey="1"

@@ -5,47 +5,110 @@ This project developed for SWE-573 lecture.
 You can access demo of the application with following link:
 https://dialecticsoftware.com/
 
-## How to build this project?
+## Table of Contents
 
-You can use make or manual commands to build application.
-make command can be installed via ``brew install make``
-* Docker and docker-compose must be installed on your machine.
-### 1. Build Frontend 
+- [How to Build Project for Development?](#how-to-build-this-project-for-development)
+- [Local Dev Environment With Docker](#local-dev-environment-with-docker)
+- [Prod Environment](#prod-environment)
+
+<a name="how-to-build-this-project-for-development"></a>
+## How to Build Project for Development?
+
+You can use make or manual commands to build the application.`make` command can be installed via ``brew install make``
+
+### Requirements
+* Docker and docker-compose
+* Java 17
+
+### 1. Build Frontend
+
 Run
+
 ```
 make build-frontend
 ``` 
+
 or
+
 ```
 infrasave/infrasave-react-client/node/npm ci --prefix infrasave/infrasave-react-client && infrasave/infrasave-react-client/node/npm start --prefix infrasave/infrasave-react-client
 ```
+
 ### 2. Launch Database and Create Schema
-Run 
+
+Run
+
 ```
 make build-db
 ``` 
-or 
+
+or
+
 ```
 docker-compose -f infrasave/docker-compose-local.yml up -d db
 ```
-### 2. Build Backend
-Run 
+
+### 3. Build Backend
+
+Run
+
 ```
 make build-backend
 ```
+
 or
+
 ```
 cd infrasave/infrasave-rest-app && ./mvnw spring-boot:run
 ```
 
 Now you can access application with the following link:
+
 * http://localhost:3000
 
 ---
 
-## Prod environment:
-* Run following command `docker-compose -f infrasave/docker-compose.yml up -d`
+<a name="local-dev-environment-with-docker"></a>
+## Local Dev Environment With Docker
 
-Now you can access application with the following link: http://localhost:80
+You can use this type of build process in order to test or examine the application.
+
+* Run following command
+
+```
+docker-compose -f infrasave/docker-compose-local.yml build && \
+docker-compose -f infrasave/docker-compose-local.yml create && \
+docker-compose -f infrasave/docker-compose-local.yml start
+```
+
+Now you can access application with the following link: http://localhost:3000
+
+<a name="prod-environment"></a>
+## Prod Environment
+* Remove local images with following command
+```
+docker-compose -f infrasave/docker-compose.yml down --remove-orphans --rmi all --volumes
+```
+* You must set environment variables in your operations system for following properties
+
+- Please contact owner of the repository in order to get value of the below environment variables.
+
+```
+export REACT_APP_BASE_URL=https://dialecticsoftware.com/api
+export active_profile=
+export datasource_url=
+export datasource_username=
+export datasource_password=
+export mail_username=
+export mail_password=
+ ``` 
+
+* Run following command
+
+```
+ docker-compose -f infrasave/docker-compose.yml up -d
+```
+
+Now you can access application with the following link: http://localhost:3000
 
 

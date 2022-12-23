@@ -24,8 +24,7 @@ public class CustomFriendRepositoryImpl implements CustomFriendRepository{
   @Override
   public List<Friend> getFriendListByUser(User user) {
     Query<Friend> query = session.createQuery(
-        "from Friend WHERE status = :status AND  requestee = :requestee OR requester = :requester", Friend.class);
-    query.setParameter("status", FriendRequestStatus.APPROVED);
+        "FROM Friend WHERE requestee = :requestee OR requester = :requester", Friend.class);
     query.setParameter("requestee", user);
     query.setParameter("requester", user);
     return query.getResultList();

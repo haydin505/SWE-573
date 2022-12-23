@@ -11,6 +11,8 @@ import com.infrasave.repository.content.ContentRepository;
 import com.infrasave.repository.friend.FriendRepository;
 import com.infrasave.repository.tag.TagRepository;
 import com.infrasave.repository.user.UserRepository;
+import com.infrasave.service.AccountService;
+import com.infrasave.service.EmailService;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -40,7 +42,9 @@ public class InfrasaveRestAppApplication {
   @ConditionalOnProperty(value = "spring.profiles.active",
                          havingValue = "dev",
                          matchIfMissing = false)
-  CommandLineRunner commandLineRunner(UserRepository userRepository,
+  CommandLineRunner commandLineRunner(EmailService emailService,
+                                      AccountService accountService,
+                                      UserRepository userRepository,
                                       ContentRepository contentRepository,
                                       FriendRepository friendRepository,
                                       TagRepository tagRepository,
@@ -50,7 +54,7 @@ public class InfrasaveRestAppApplication {
       user.setUsername("mehmet600");
       user.setName("Mehmet");
       user.setSurname("Selman");
-      user.setEmail("test@test.com");
+      user.setEmail("mhnaydin505@gmail.com");
       user.setPassword(passwordEncoder.encode("123456"));
       LocalDateTime now = LocalDateTime.now();
       user.setBirthDate(now);
@@ -127,6 +131,10 @@ public class InfrasaveRestAppApplication {
       friendContent.setVisibilityLevel(VisibilityLevel.FRIENDS);
       friendContent.setTags(new HashSet<>(List.of(financeTag, defaultTag)));
       contentRepository.save(friendContent);
+
+      emailService.sendSimpleMessage("mhnaydin505@gmail.com", "Application Started Successfully!",
+                                     "Hello, your application started successfully!");
+      //accountService.resetPassword("mhnaydin505@gmail.com");
     };
   }
 }

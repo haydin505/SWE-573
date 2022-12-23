@@ -34,6 +34,8 @@ services:
       datasource_url: ${datasource_url}
       datasource_username: ${datasource_username}
       datasource_password: ${datasource_password}
+      mail_username: ${mail_username}
+      mail_password: ${mail_password}
       hibernate_ddl_auto: update
     container_name: infrasave-backend
     build: ./infrasave-rest-app/

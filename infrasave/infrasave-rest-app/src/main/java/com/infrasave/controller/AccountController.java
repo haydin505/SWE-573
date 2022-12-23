@@ -4,6 +4,8 @@ import com.infrasave.bean.AppResponse;
 import com.infrasave.bean.AppResponses;
 import com.infrasave.bean.LoginRequest;
 import com.infrasave.bean.RegisterRequest;
+import com.infrasave.bean.ResetPasswordRequest;
+import com.infrasave.bean.ResetPasswordWithTokenRequest;
 import com.infrasave.exception.UserAlreadyRegisteredException;
 import com.infrasave.service.AccountService;
 import javax.servlet.ServletException;
@@ -62,5 +64,17 @@ public class AccountController {
   public ResponseEntity logout(HttpServletRequest request) throws ServletException {
     request.logout();
     return ResponseEntity.ok().build();
+  }
+
+  @PostMapping("/reset-password")
+  public AppResponse resetPassword(@RequestBody @Validated ResetPasswordRequest request) {
+    accountService.resetPassword(request.email());
+    return AppResponse.successful();
+  }
+
+  @PostMapping("/reset-password/token")
+  public AppResponse resetPasswordWithToken(@RequestBody @Validated ResetPasswordWithTokenRequest request) {
+    accountService.resetPasswordWithToken(request.token(), request.password());
+    return AppResponse.successful();
   }
 }

@@ -28,11 +28,13 @@ services:
   backend:
     restart: always
     environment:
-      - active_profile=dev
-      - datasource_url=jdbc:mysql://mysqldb:3306/infrasave
-      - datasource_username=root
-      - datasource_password=
-      - hibernate_ddl_auto=update
+      active_profile: dev
+      datasource_url: jdbc:mysql://mysqldb:3306/infrasave
+      datasource_username: root
+      datasource_password: ''
+      mail_username: ${mail_username}
+      mail_password: ${mail_password}
+      hibernate_ddl_auto: update
     container_name: infrasave-backend
     build: ./infrasave-rest-app/
     image: mhnaydin/infrasave-backend
@@ -53,12 +55,16 @@ services:
   frontend:
     restart: always
     container_name: infrasave-frontend
-    build: ./infrasave-react-client
+    build:
+      context: ./infrasave-react-client
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_BASE_URL: http://localhost:8080
     image: mhnaydin/infrasave-frontend
     ports:
-      - '80:3000'
+      - '3000:80'
     expose:
-      - '80:3000'
+      - '3000:80'
     networks:
       - test-network
 #    deploy:

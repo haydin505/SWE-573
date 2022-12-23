@@ -1,9 +1,9 @@
-import {Button, Card, DatePicker, Form, Input, Layout} from 'antd';
-import React, {useEffect} from 'react';
+import {Button, Card, DatePicker, Form, Input, Layout, Result} from 'antd';
+import React, {useEffect, useState} from 'react';
 import {RegisterRequest} from "../../types/requests";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../redux/store";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {Content} from "antd/es/layout/layout";
 import axiosInstance from "../../config/customAxios";
 
@@ -19,7 +19,7 @@ const Register: React.FC = () => {
 			birthDate: values.birthDate
 		}
 		console.log(registerRequest);
-		axiosInstance.post("http://localhost:8080/register", registerRequest, {withCredentials: true}).then(
+		axiosInstance.post("/register", registerRequest).then(
 			response => {
 				if (response.status === 200) {
 					const data = response.data;
@@ -27,8 +27,8 @@ const Register: React.FC = () => {
 					if (!data.successful) {
 						alert(data.errorDetail);
 					} else {
-						alert("Register Successful")
-						navigate("/");
+						setSuccessful(true)
+						alert("Register Successful!")
 					}
 				}
 			}).catch(error => {
@@ -39,6 +39,7 @@ const Register: React.FC = () => {
 	const dispatch = useDispatch();
 	const authenticated = useSelector((state: RootState) => state.authentication.authenticated);
 	const navigate = useNavigate();
+	const [successful, setSuccessful] = useState(false);
 
 	useEffect(() => {
 		const authenticatedLocal = localStorage.getItem("authenticated");
@@ -57,7 +58,11 @@ const Register: React.FC = () => {
 			<Layout style={{
 				padding: '50px',
 				background: '#ececec'
-			}}>
+			}}> {successful ? <Result status="success" title="Successfully registered!" extra={
+					<Button type="primary" key="login">
+						<Link to="/login">Login</Link>
+					</Button>
+				}/> :
 				<Content style={{margin: 'auto', width: '50%', height: 'auto'}}>
 					<Card>
 						<Form
@@ -150,6 +155,7 @@ const Register: React.FC = () => {
 						</Form>
 					</Card>
 				</Content>
+			}
 			</Layout>
 		</div>
 	);

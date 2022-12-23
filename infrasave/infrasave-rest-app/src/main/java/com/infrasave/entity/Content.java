@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -25,6 +27,7 @@ import javax.persistence.Table;
 public class Content extends AbstractEntity {
 
   @Column(name = "visibility_level", nullable = false)
+  @Enumerated(EnumType.STRING)
   private VisibilityLevel visibilityLevel;
 
   @Column(nullable = false)

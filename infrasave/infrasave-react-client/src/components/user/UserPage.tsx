@@ -74,11 +74,15 @@ const UserPage: FC<UserPageProps> = (props): JSX.Element => {
 			return;
 		}
 		try {
-			const res = await axiosInstance.delete(`/friends/${id}`, {withCredentials: true,});
-			const response = res.data;
-			console.log(response);
+			const res = await axiosInstance.delete(`/friends/${id}`, {withCredentials: true});
+			const response: Response = res.data;
+			console.log(response)
+			if (!response.successful) {
+				alert("Couldn't remove friend.");
+			}
+			getUser();
 		} catch (err) {
-			alert("Couldn't complete friend request.");
+			alert("Couldn't remove friend.");
 		}
 	}
 
@@ -86,7 +90,6 @@ const UserPage: FC<UserPageProps> = (props): JSX.Element => {
 		setLoading(true);
 		axiosInstance.get(`/users/${id}`, {withCredentials: true}).then((res) => {
 			const response: Response = res.data;
-			console.log(response);
 			if (!response.successful) {
 				alert("Couldn't get user details.");
 				return;
