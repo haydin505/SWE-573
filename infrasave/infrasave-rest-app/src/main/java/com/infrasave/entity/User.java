@@ -16,11 +16,13 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "user",
        uniqueConstraints = {
-           @UniqueConstraint(name = "user_email_uk", columnNames = {"email"})
+           @UniqueConstraint(name = "user_email_uk", columnNames = {"email"}),
+           @UniqueConstraint(name = "user_username_uk", columnNames = {"username"})
        },
        indexes = {
            @Index(name = "user_name_ix", columnList = "name"),
-           @Index(name = "user_surname_ix", columnList = "surname")
+           @Index(name = "user_surname_ix", columnList = "surname"),
+           @Index(name = "user_resetPasswordToken_ix", columnList = "resetPasswordToken")
        })
 public class User extends AbstractEntity {
 
@@ -41,6 +43,12 @@ public class User extends AbstractEntity {
 
   @Column(nullable = false)
   private LocalDateTime birthDate;
+
+  @Column(nullable = true)
+  private String resetPasswordToken;
+
+  @Column(nullable = true)
+  private LocalDateTime resetPasswordTokenExpireDate;
 
   @Column(name = "roles", nullable = false)
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -98,6 +106,22 @@ public class User extends AbstractEntity {
 
   public void setBirthDate(LocalDateTime birthDate) {
     this.birthDate = birthDate;
+  }
+
+  public String getResetPasswordToken() {
+    return resetPasswordToken;
+  }
+
+  public void setResetPasswordToken(String resetPasswordToken) {
+    this.resetPasswordToken = resetPasswordToken;
+  }
+
+  public LocalDateTime getResetPasswordTokenExpireDate() {
+    return resetPasswordTokenExpireDate;
+  }
+
+  public void setResetPasswordTokenExpireDate(LocalDateTime resetPasswordTokenExpireDate) {
+    this.resetPasswordTokenExpireDate = resetPasswordTokenExpireDate;
   }
 
   public List<UserRole> getRoles() {

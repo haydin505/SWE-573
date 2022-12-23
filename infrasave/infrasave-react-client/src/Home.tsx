@@ -13,14 +13,6 @@ const Home: React.FC = () => {
 	const user = useSelector((state: RootState) => state.authentication.user);
 	const authenticated = useSelector((state: RootState) => state.authentication.authenticated);
 
-	useEffect(() => {
-		getMyFeed();
-	}, [])
-
-	useEffect(() => {
-		getMyFeed();
-	}, [authenticated])
-
 	const getMyFeed = () => {
 		setLoading(true);
 		axiosInstance.get("/contents/my-feed", {withCredentials: true}).then(res => {
@@ -29,11 +21,8 @@ const Home: React.FC = () => {
 		}).finally(() => setLoading(false));
 	}
 
-	console.log("authenticated", authenticated);
-	console.log("contents", contents);
-	console.log("user", user);
-
-	return <ContentModule contents={contents} user={user} reloadContent={getMyFeed} enableAddContent={true} loading={loading}/>
+	return <ContentModule contents={contents} user={user} reloadContent={getMyFeed} enableAddContent={true}
+	                      loading={loading}/>
 }
 
 export default Home;

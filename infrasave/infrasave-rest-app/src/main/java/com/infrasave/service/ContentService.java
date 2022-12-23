@@ -83,7 +83,7 @@ public class ContentService {
     List<Content> friendContents = getFriendContents(user);
     List<Content> everyoneContents = contentRepository.getByVisibility(List.of(VisibilityLevel.EVERYONE));
     everyoneContents =
-        everyoneContents.stream().filter(content -> content.getCreatorId().equals(user.getId())).toList();
+        everyoneContents.stream().filter(content -> !content.getCreatorId().getId().equals(user.getId())).toList();
     List<Content> resultList = new ArrayList<>();
     resultList.addAll(createdContents);
     resultList.addAll(friendContents);

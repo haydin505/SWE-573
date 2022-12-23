@@ -56,7 +56,11 @@ public class FriendService {
   public List<Friend> getRequesteePendingFriendRequests() {
     User user = getCurrentUser();
     List<Friend> friendList = friendRepository.getFriendListByUser(user);
-    return friendList.stream().filter(friend -> friend.getStatus().equals(FriendRequestStatus.PENDING)).toList();
+    return friendList.stream()
+                     .filter(friend ->
+                                 friend.getStatus().equals(FriendRequestStatus.PENDING) &&
+                                 !friend.getRequester().getId().equals(user.getId()))
+                     .toList();
   }
 
   private User getCurrentUser() {
@@ -87,6 +91,7 @@ public class FriendService {
     if (currentUserId.equals(friend.getRequestee().getId()) ||
         currentUserId.equals(friend.getRequester().getId())) {
       friendRepository.delete(friend);
+      return;
     }
     throw new NotAuthorizedException();
   }

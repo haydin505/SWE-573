@@ -1,6 +1,6 @@
 package com.infrasave.exception;
 
-import org.springframework.http.HttpStatus;
+import static com.infrasave.enums.ErrorCode.USER_ALREADY_REGISTERED_EXCEPTION;
 
 /**
  * @author huseyinaydin
@@ -8,6 +8,6 @@ import org.springframework.http.HttpStatus;
 public class UserAlreadyRegisteredException extends AbstractException {
 
   public UserAlreadyRegisteredException() {
-    super("User already registered", "80000", HttpStatus.FORBIDDEN);
+    super(USER_ALREADY_REGISTERED_EXCEPTION);
   }
 }

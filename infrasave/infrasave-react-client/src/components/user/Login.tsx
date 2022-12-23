@@ -1,10 +1,10 @@
-import {Button, Card, Form, Input, Layout} from 'antd';
+import {Button, Card, Form, Input, Layout, Space, Tooltip, Typography} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {LoginRequest} from "../../types/requests";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../redux/store";
 import {authenticateFail, authenticateSuccess} from "../../redux/authenticationReducer";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {Content} from "antd/es/layout/layout";
 import axiosInstance from "../../config/customAxios";
 import {Response} from "../../types/response";
@@ -34,10 +34,6 @@ const Login: React.FC = () => {
 		}).finally(() => setLoading(false));
 	};
 
-	const onFinishFailed = (errorInfo: any) => {
-		console.log('Failed:', errorInfo);
-	};
-
 	const dispatch = useDispatch();
 	const authenticated = useSelector((state: RootState) => state.authentication.authenticated);
 	const navigate = useNavigate();
@@ -65,17 +61,16 @@ const Login: React.FC = () => {
 						<Form
 							layout="horizontal"
 							name="basic"
-							labelCol={{span: 8}}
-							wrapperCol={{span: 16}}
+							labelCol={{span: 7}}
+							wrapperCol={{span: 12}}
 							onFinish={onFinish}
-							onFinishFailed={onFinishFailed}
 							autoComplete="off"
 							disabled={loading}
 						>
 							<Form.Item
 								label="E-mail"
 								name="email"
-								rules={[{required: true, message: 'Please input your username!'}]}
+								rules={[{required: true, message: 'Please input your email!'}]}
 							>
 								<Input/>
 							</Form.Item>
@@ -88,11 +83,16 @@ const Login: React.FC = () => {
 								<Input.Password/>
 							</Form.Item>
 
-							<Form.Item wrapperCol={{offset: 8, span: 16}}>
+							<Form.Item wrapperCol={{offset: 11, span: 16}}>
 								<Button type="primary" htmlType="submit" loading={loading}>
 									Submit
 								</Button>
 							</Form.Item>
+							<Space>
+								<Tooltip title="Useful information">
+									<Link to="/forgot-password">Forgot password?</Link>
+								</Tooltip>
+							</Space>
 						</Form>
 					</Card>
 				</Content>

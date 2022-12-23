@@ -55,15 +55,6 @@ const ContentModule: FC<ContentModuleProps> = (props): JSX.Element => {
 
 	const onEditContentComplete = (content: Content) => {
 		props.reloadContent();
-		// console.log("Hellooo", content);
-		// const updatedContents = contents.map(c => {
-		// 	if (c.id === content.id) {
-		// 		return {...c, title: content.title, url: content.url,
-		// 			imageUrl: content.imageUrl, description: content.description, visibilityLevel: content.};
-		// 	}
-		// 	return c;
-		// });
-		// setContents(updatedContents);
 	}
 
 	const onClickDeleteContent = (content: Content) => {

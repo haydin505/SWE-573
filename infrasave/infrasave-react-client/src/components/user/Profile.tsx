@@ -2,7 +2,6 @@ import React, {FC, useEffect, useState} from "react";
 import {Avatar, Button, Card, Col, DatePicker, Form, Input, Layout, List, Row, Skeleton} from "antd";
 import axiosInstance from "../../config/customAxios";
 import {Link} from "react-router-dom";
-import {useDispatch} from "react-redux";
 import {Content, UserDTO} from "../../types/types";
 import moment from "moment";
 import {Response} from "../../types/response";
@@ -13,7 +12,6 @@ interface ProfileProps {
 }
 
 const Profile: FC<ProfileProps> = (props: ProfileProps): JSX.Element => {
-	const dispatch = useDispatch();
 	const [user, setUser] = useState<UserDTO | undefined>(undefined);
 	const [contents, setContents] = useState<Content[]>([]);
 	const [loading, setLoading] = useState(false);

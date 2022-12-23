@@ -43,8 +43,7 @@ public class ContentController {
   @GetMapping("/my-feed")
   public AppResponse<List<ContentDTO>> getMyFeed() {
     List<ContentDTO> contents = contentService.getMyFeed();
-    AppResponse<List<ContentDTO>> appResponse = AppResponses.successful(contents);
-    return appResponse;
+    return AppResponses.successful(contents);
   }
 
   @PostMapping

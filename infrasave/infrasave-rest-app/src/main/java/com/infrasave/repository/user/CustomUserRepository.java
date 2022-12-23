@@ -16,4 +16,8 @@ public interface CustomUserRepository {
   Optional<User> getByEmail(String email);
 
   List<User> getUsersByNameAndSurname(List<String> names);
+
+  Optional<User> getByUsername(String username);
+
+  Optional<User> getByResetPasswordToken(String resetPasswordToken);
 }

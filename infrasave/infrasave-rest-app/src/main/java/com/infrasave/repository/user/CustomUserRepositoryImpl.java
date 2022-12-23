@@ -10,6 +10,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
@@ -24,6 +25,16 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
 
   public CustomUserRepositoryImpl(Session session) {
     this.session = session;
+  }
+
+  private static Optional<User> getSingleUser(List<User> resultList) {
+    if (resultList.size() == 1) {
+      return Optional.of(resultList.get(0));
+    }
+    if (resultList.size() > 1) {
+      throw new DuplicateKeyException("Thrown by com.infrasave.repository.user.CustomUserRepositoryImpl.getByUsername");
+    }
+    return Optional.empty();
   }
 
   public User getById(Long id) throws Exception {
@@ -67,5 +78,21 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
     Query<User> query = session.createQuery(cq);
     List<User> resultList = query.getResultList();
     return resultList;
+  }
+
+  @Override
+  public Optional<User> getByUsername(String username) {
+    Query<User> query = session.createQuery("FROM User u WHERE u.username = :username", User.class);
+    query.setParameter("username", username);
+    List<User> resultList = query.getResultList();
+    return getSingleUser(resultList);
+  }
+
+  @Override
+  public Optional<User> getByResetPasswordToken(String resetPasswordToken) {
+    Query<User> query = session.createQuery("FROM User u WHERE u.resetPasswordToken = :resetPasswordToken", User.class);
+    query.setParameter("resetPasswordToken", resetPasswordToken);
+    List<User> resultList = query.getResultList();
+    return getSingleUser(resultList);
   }
 }

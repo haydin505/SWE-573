@@ -30,14 +30,19 @@ public class SecurityConfiguration {
   public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationProvider authenticationProvider)
       throws Exception {
     http
-        .exceptionHandling().accessDeniedHandler(new AccessDeniedHandlerImpl())
+        .exceptionHandling()
+        .accessDeniedHandler(new AccessDeniedHandlerImpl())
         .and()
         .addFilterBefore(new SecurityServletFilter(), UsernamePasswordAuthenticationFilter.class)
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
         .and()
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-        .authorizeRequests().antMatchers("/exit", "/login", "/register", "/forgot-password", "/users/**").permitAll()
-        .anyRequest().authenticated();
+        .authorizeRequests()
+        .antMatchers("/exit", "/login", "/register", "/reset-password", "/reset-password/token", "/users/**")
+        .permitAll()
+        .anyRequest()
+        .authenticated();
     http.formLogin().disable();
     http.csrf().disable();
     http.cors();

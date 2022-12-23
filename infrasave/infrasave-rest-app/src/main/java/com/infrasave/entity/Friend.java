@@ -3,6 +3,8 @@ package com.infrasave.entity;
 import com.infrasave.enums.FriendRequestStatus;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -31,6 +33,7 @@ public class Friend extends AbstractEntity {
   private User requestee;
 
   @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
   private FriendRequestStatus status;
 
   public User getRequester() {

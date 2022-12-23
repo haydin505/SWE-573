@@ -1,5 +1,6 @@
 package com.infrasave.exception;
 
+import com.infrasave.enums.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -15,6 +16,12 @@ public abstract class AbstractException extends RuntimeException {
     super(message);
     this.httpStatus = httpStatus;
     this.code = code;
+  }
+
+  public AbstractException(ErrorCode errorCode) {
+    super(errorCode.getErrorDetail());
+    this.httpStatus = errorCode.getHttpStatus();
+    this.code = errorCode.getErrorCode();
   }
 
   public String getCode() {
