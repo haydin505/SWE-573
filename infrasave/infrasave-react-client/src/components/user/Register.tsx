@@ -1,7 +1,7 @@
 import {Button, Card, DatePicker, Form, Input, Layout, Result} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {RegisterRequest} from "../../types/requests";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {RootState} from "../../redux/store";
 import {Link, useNavigate} from "react-router-dom";
 import {Content} from "antd/es/layout/layout";
@@ -36,7 +36,6 @@ const Register: React.FC = () => {
 		});
 	};
 
-	const dispatch = useDispatch();
 	const authenticated = useSelector((state: RootState) => state.authentication.authenticated);
 	const navigate = useNavigate();
 	const [successful, setSuccessful] = useState(false);

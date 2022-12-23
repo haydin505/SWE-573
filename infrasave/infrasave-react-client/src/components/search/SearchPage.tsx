@@ -8,6 +8,9 @@ import {Content, Search, UserDTO} from "../../types/types";
 import {Link, useSearchParams} from "react-router-dom";
 import {formatDate} from "../../utils/util";
 import {CheckOutlined, ClockCircleOutlined, HeartFilled, HeartOutlined} from "@ant-design/icons";
+import {useSelector} from "react-redux";
+import {RootState} from "../../redux/store";
+import {User} from "../../redux/authenticationReducer";
 
 const SearchPage: React.FC = (): JSX.Element => {
 	const options = [{label: "User", value: "user"}, {label: "Content", value: "content"}, {label: "Tag", value: "tag"}];
@@ -16,6 +19,7 @@ const SearchPage: React.FC = (): JSX.Element => {
 	const [loading, setLoading] = useState(false);
 	const [query, setQuery] = useState<string | undefined>(undefined);
 	const [searchParams, setSearchParams] = useSearchParams();
+	const currentUser: User | undefined = useSelector((state: RootState) => state.authentication.user);
 
 	useEffect(() => {
 		const urlParsedQuery = searchParams.get("query");
@@ -35,13 +39,12 @@ const SearchPage: React.FC = (): JSX.Element => {
 			obj[c] = true;
 		});
 		customAxios.get("/search", {params: obj, withCredentials: true}).then(res => {
-			console.log(res.data);
 			const response: Response = res.data;
 			if (!response.successful) {
 				alert("Search couldn't complete successfully");
+				return;
 			}
 			const search: Search = response.data;
-			console.log(search);
 			setSearch(search);
 		}).catch(err => {
 			alert("Search couldn't complete successfully");
@@ -128,6 +131,9 @@ const SearchPage: React.FC = (): JSX.Element => {
 			render: (data: string, record: UserDTO) => {
 				const id = record.friendDTO?.id;
 				const friendRequestStatus = data;
+				if (currentUser?.userId === record.userId) {
+					return <p>This is your profile</p>
+				}
 				const friendButtons = () => {
 					if (friendRequestStatus === 'APPROVED') {
 						return (<>
@@ -245,7 +251,8 @@ const SearchPage: React.FC = (): JSX.Element => {
 		textAlign: "center", display: "flex", padding: '50px', background: '#ececec'
 	}}>
 		<Input.Search style={{margin: 'auto', width: '50%'}} size={"middle"} bordered
-		            value={query}  defaultValue={query} onChange={(data) => setQuery(data.target.value)} onSearch={onSearch}/>
+		              value={query} defaultValue={query} onChange={(data) => setQuery(data.target.value)}
+		              onSearch={onSearch}/>
 		<Checkbox.Group options={options} defaultValue={['user', 'content', 'tag']} onChange={onCheckBoxChange}/>
 		<Tabs
 			defaultActiveKey="1"

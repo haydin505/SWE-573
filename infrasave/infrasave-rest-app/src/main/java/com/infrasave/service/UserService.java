@@ -103,14 +103,15 @@ public class UserService {
                        creatorUser.getBirthDate(),
                        null,
                        null,
+                       null,
                        visibleContents,
                        friends,
                        friendList.size(),
                        friendDTO);
   }
 
-  public void updateUser(Long userId, String name, String surname, String username, String email,
-                         LocalDateTime birthDate) {
+  public void updateUser(Long userId, String name, String surname, String username,
+                         String phoneNumber, LocalDateTime birthDate) {
     User user = getUserById(userId);
     boolean updated = false;
     if (nonNull(name)) {
@@ -125,8 +126,8 @@ public class UserService {
       user.setUsername(username);
       updated = true;
     }
-    if (nonNull(email)) {
-      user.setEmail(email);
+    if (nonNull(phoneNumber)) {
+      user.setPhoneNumber(phoneNumber);
       updated = true;
     }
     if (nonNull(birthDate)) {

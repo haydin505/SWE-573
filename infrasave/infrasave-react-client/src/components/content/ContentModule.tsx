@@ -3,7 +3,6 @@ import {Content} from "../../types/types";
 import {Anchor, Button, Card, Col, Descriptions, Empty, Image, Layout, Popover, Row, Space, Spin, Tag} from "antd";
 import {DeleteOutlined, EditOutlined, HeartFilled, HeartOutlined} from "@ant-design/icons";
 import {Link} from "react-router-dom";
-import {formatDate} from "../../utils/util";
 import AddContentModal from "./AddContentModal";
 import EditContentModal from "./EditContentModal";
 import {useSelector} from "react-redux";
@@ -11,6 +10,7 @@ import {RootState} from "../../redux/store";
 import axiosInstance from "../../config/customAxios";
 import {Response} from "../../types/response";
 import {User} from "../../redux/authenticationReducer";
+import moment from "moment-timezone";
 
 interface ContentModuleProps {
 	contents: Content[];
@@ -41,7 +41,6 @@ const ContentModule: FC<ContentModuleProps> = (props): JSX.Element => {
 
 	const addContent = () => {
 		showAddContentModal ? setShowAddContentModal(false) : setShowAddContentModal(true);
-		props.reloadContent();
 	}
 
 	const showEditContent = () => {
@@ -53,7 +52,11 @@ const ContentModule: FC<ContentModuleProps> = (props): JSX.Element => {
 		setShowEditContentModal(true);
 	}
 
-	const onEditContentComplete = (content: Content) => {
+	const onEditContentComplete = () => {
+		props.reloadContent();
+	}
+
+	const onAddContentComplete = () => {
 		props.reloadContent();
 	}
 
@@ -125,11 +128,12 @@ const ContentModule: FC<ContentModuleProps> = (props): JSX.Element => {
 			background: '#ececec'
 		}}>
 			{authenticated && <Space>
-				<Button size='middle' type="primary" htmlType="submit" onClick={addContent}>
+				<Button size='middle' type="primary" onClick={addContent}>
 					Add Content
 				</Button>
 			</Space>}
-			<AddContentModal showAddContentModal={showAddContentModal} setShowAddContentModal={addContent}/>
+			<AddContentModal showAddContentModal={showAddContentModal} setShowAddContentModal={addContent}
+			                 onAddContentComplete={onAddContentComplete}/>
 			<EditContentModal content={currentContent} showEditContentModal={showEditContentModal}
 			                  setShowEditContentModal={showEditContent} onEditContentComplete={onEditContentComplete}/>
 			{loading ? (<Spin tip="Loading" size="large">
@@ -184,10 +188,10 @@ const ContentModule: FC<ContentModuleProps> = (props): JSX.Element => {
 							})}
 						</Descriptions.Item>}
 						<Descriptions.Item span={0} label="Created At">
-							<p>{formatDate(content.createdAt, 'YYYY-MM-DD HH:mm')}</p>
+							<p>{moment.utc(content.createdAt).local().format('YYYY-MM-DD HH:mm')}</p>
 						</Descriptions.Item>
 						<Descriptions.Item span={0} label="Last Updated At">
-							<p>{formatDate(content.lastUpdatedAt, 'YYYY-MM-DD HH:mm')}</p>
+							<p>{moment.utc(content.lastUpdatedAt).local().format('YYYY-MM-DD HH:mm')}</p>
 						</Descriptions.Item>
 					</Descriptions>
 					<Row>

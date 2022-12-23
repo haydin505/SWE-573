@@ -37,6 +37,7 @@ export interface UserDTO {
 	name: string;
 	surname: string;
 	email: string;
+	phoneNumber: string;
 	birthDate: Date;
 	createdContents: Content[];
 	friendCount: number;

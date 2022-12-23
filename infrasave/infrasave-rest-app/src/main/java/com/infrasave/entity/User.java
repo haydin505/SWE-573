@@ -39,6 +39,9 @@ public class User extends AbstractEntity {
   private String email;
 
   @Column(nullable = false)
+  private String phoneNumber;
+
+  @Column(nullable = false)
   private String password;
 
   @Column(nullable = false)
@@ -90,6 +93,14 @@ public class User extends AbstractEntity {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
   }
 
   public String getPassword() {

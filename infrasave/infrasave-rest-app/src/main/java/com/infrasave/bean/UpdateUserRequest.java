@@ -9,7 +9,7 @@ import javax.validation.constraints.PastOrPresent;
 public record UpdateUserRequest(String username,
                                 String name,
                                 String surname,
-                                String email,
+                                String phoneNumber,
                                 @PastOrPresent LocalDateTime birthDate) {
 
 }
