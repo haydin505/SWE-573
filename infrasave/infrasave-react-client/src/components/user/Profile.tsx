@@ -45,6 +45,7 @@ const Profile: FC<ProfileProps> = (props: ProfileProps): JSX.Element => {
 			if (!response.successful) {
 				alert("Couldn't update profile");
 			}
+			getCurrentUser();
 		}).catch(err => {
 			alert("Couldn't update profile");
 		}).finally(() => setLoading(false))

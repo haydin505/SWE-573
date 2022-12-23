@@ -67,6 +67,11 @@ public class AccountService {
     userRole.setRole("ROLE_USER");
     user.setRoles(List.of(userRole));
     userRepository.save(user);
+    String text = String.format("Hello %s %s,\n"
+                                + "Thank you for registering. We wish you a good time in Infrasave.\n"
+                                + "If you would like to contact us you can directly reply to this mail.",
+                                user.getName(), user.getSurname());
+    emailService.sendSimpleMessage(user.getEmail(), "Welcome to Infrasave", text);
   }
 
   public void resetPassword(String email) {
