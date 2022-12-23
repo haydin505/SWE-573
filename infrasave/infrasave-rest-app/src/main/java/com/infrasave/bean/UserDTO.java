@@ -19,6 +19,8 @@ public class UserDTO {
 
   private String email;
 
+  private String phoneNumber;
+
   private LocalDateTime birthDate;
 
   private List<ContentDTO> createdContents;
@@ -35,6 +37,7 @@ public class UserDTO {
   }
 
   public UserDTO(String username, Long userId, String name, String surname, LocalDateTime birthDate, String email,
+                 String phoneNumber,
                  List<String> roles, List<ContentDTO> createdContents, List<UserDTO> friends, Integer friendCount,
                  FriendDTO friendDTO) {
     this.username = username;
@@ -43,6 +46,7 @@ public class UserDTO {
     this.surname = surname;
     this.birthDate = birthDate;
     this.email = email;
+    this.phoneNumber = phoneNumber;
     this.roles = roles;
     this.createdContents = createdContents;
     this.friends = friends;
@@ -95,6 +99,14 @@ public class UserDTO {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
   }
 
   public LocalDateTime getBirthDate() {

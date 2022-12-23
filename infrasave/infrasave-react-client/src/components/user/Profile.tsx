@@ -3,9 +3,9 @@ import {Avatar, Button, Card, Col, DatePicker, Form, Input, Layout, List, Row, S
 import axiosInstance from "../../config/customAxios";
 import {Link} from "react-router-dom";
 import {Content, UserDTO} from "../../types/types";
-import moment from "moment";
 import {Response} from "../../types/response";
 import ContentModule from "../content/ContentModule";
+import moment from "moment-timezone";
 
 interface ProfileProps {
 
@@ -38,7 +38,8 @@ const Profile: FC<ProfileProps> = (props: ProfileProps): JSX.Element => {
 			name: user.name,
 			surname: user.surname,
 			email: user.email,
-			birthDate: user.birthDate
+			birthDate: user.birthDate,
+			phoneNumber: user.phoneNumber
 		}
 		axiosInstance.put("/users", request, {withCredentials: true}).then(res => {
 			const response: Response = res.data;
@@ -48,7 +49,8 @@ const Profile: FC<ProfileProps> = (props: ProfileProps): JSX.Element => {
 			getCurrentUser();
 		}).catch(err => {
 			alert("Couldn't update profile");
-		}).finally(() => setLoading(false))
+			setLoading(false);
+		});
 	}
 
 	return (
@@ -61,35 +63,50 @@ const Profile: FC<ProfileProps> = (props: ProfileProps): JSX.Element => {
 				<Card style={{width: '50%'}} loading={loading} title="User Details">
 					<Form labelCol={{span: 8}}
 					      layout="horizontal"
-					      onFinish={updateCurrentUser}>
+					      onFinish={updateCurrentUser}
+					      fields={[
+						      {name: ["name"], value: user?.name},
+						      {name: ["surname"], value: user?.surname},
+						      {name: ["username"], value: user?.username},
+						      {name: ["phoneNumber"], value: user?.phoneNumber},
+						      {name: ["birthDate"], value: moment.utc(user?.birthDate).local()}
+					      ]}
+					>
 						<Row>
 							<Col span={12}>
 								<Form.Item label="Name" name="name">
-									<Input defaultValue={user?.name}/>
+									<Input/>
 								</Form.Item>
 							</Col>
 							<Col span={12}>
 								<Form.Item label="Surname" name="surname">
-									<Input defaultValue={user?.surname}/>
+									<Input/>
 								</Form.Item>
 							</Col>
 						</Row>
 						<Row>
 							<Col span={12}>
 								<Form.Item label="Birth Date" name="birthDate">
-									<DatePicker format="YYYY-MM-DD" defaultValue={moment(user?.birthDate)}/>
+									<DatePicker format="YYYY-MM-DD"/>
 								</Form.Item>
 							</Col>
 						</Row>
 						<Row>
 							<Col span={12}>
-								<Form.Item label="Username">
-									{user?.username}
+								<Form.Item label="Username" name="username">
+									<Input/>
 								</Form.Item>
 							</Col>
 							<Col span={12}>
 								<Form.Item label="E-mail">
 									{user?.email}
+								</Form.Item>
+							</Col>
+						</Row>
+						<Row>
+							<Col span={12}>
+								<Form.Item label="Phone Number" name="phoneNumber">
+									<Input/>
 								</Form.Item>
 							</Col>
 						</Row>

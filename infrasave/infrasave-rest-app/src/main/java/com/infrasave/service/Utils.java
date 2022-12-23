@@ -9,7 +9,8 @@ import com.infrasave.entity.User;
 public class Utils {
 
   public static UserDTO mapCreatorToUserDTO(User user) {
-    return new UserDTO(user.getUsername(), user.getId(), user.getName(), user.getSurname(), null, null, null, null,
-                       null, null, null);
+    return new UserDTO(user.getUsername(), user.getId(), user.getName(), user.getSurname(),
+                       null, null, null, null,
+                       null, null, null, null);
   }
 }

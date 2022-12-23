@@ -10,6 +10,7 @@ import TagSelect from "../tag/TagSelect";
 interface AddContentModalProps {
 	showAddContentModal: boolean;
 	setShowAddContentModal: () => void;
+	onAddContentComplete:() => void;
 }
 
 const options = enum2Options(VisibilityLevel)
@@ -26,6 +27,7 @@ const AddContentModal: FC<AddContentModalProps> = (props: AddContentModalProps):
 				alert(response.errorDetail);
 			}
 			props.setShowAddContentModal()
+			props.onAddContentComplete();
 		}).catch(err => {
 			alert("Could not create content.")
 		}).finally(() => setLoading(false));

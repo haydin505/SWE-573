@@ -10,7 +10,7 @@ import TagSelect from "../tag/TagSelect";
 interface EditContentModalProps {
 	showEditContentModal: boolean;
 	setShowEditContentModal: () => void;
-	onEditContentComplete:(content: Content) => void;
+	onEditContentComplete: () => void;
 	content: Content | null;
 }
 
@@ -27,7 +27,7 @@ const EditContentModal: FC<EditContentModalProps> = (props: EditContentModalProp
 			if (!response.successful) {
 				alert(response.errorDetail);
 			} else {
-				props.onEditContentComplete(content);
+				props.onEditContentComplete();
 				props.setShowEditContentModal();
 			}
 		}).catch(res => {

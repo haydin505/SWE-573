@@ -56,6 +56,7 @@ public class InfrasaveRestAppApplication {
       user.setSurname("Selman");
       user.setEmail("infrasave.app@gmail.com");
       user.setPassword(passwordEncoder.encode("123456"));
+      user.setPhoneNumber("+905111111111");
       LocalDateTime now = LocalDateTime.now();
       user.setBirthDate(now);
       user.setLastUpdatedAt(now);
@@ -93,6 +94,7 @@ public class InfrasaveRestAppApplication {
       user2.setName("Suleyman");
       user2.setSurname("Yar");
       user2.setEmail("test@test2.com");
+      user2.setPhoneNumber("+905111111112");
       user2.setPassword(passwordEncoder.encode("123456"));
       user2.setBirthDate(now);
       user2.setLastUpdatedAt(now);

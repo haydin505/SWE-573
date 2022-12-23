@@ -64,6 +64,7 @@ public class UserController {
     userDTO.setUserId(user.getId());
     userDTO.setUsername(user.getUsername());
     userDTO.setBirthDate(user.getBirthDate());
+    userDTO.setPhoneNumber(user.getPhoneNumber());
     List<Long> myContentIds = user.getMyContents().stream().map(myContent -> myContent.getContent().getId()).toList();
     userDTO.setCreatedContents(user.getCreatedContents().stream().map(content -> {
       List<TagDTO> tags = content.getTags().stream().map(TagDTO::new).toList();
@@ -83,7 +84,7 @@ public class UserController {
                            updateUserRequest.name(),
                            updateUserRequest.surname(),
                            updateUserRequest.username(),
-                           updateUserRequest.email(),
+                           updateUserRequest.phoneNumber(),
                            updateUserRequest.birthDate());
     return AppResponses.successful();
   }

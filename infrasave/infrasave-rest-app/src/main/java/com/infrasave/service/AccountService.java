@@ -60,6 +60,7 @@ public class AccountService {
     user.setUsername(request.username());
     user.setEmail(request.email());
     user.setBirthDate(request.birthDate());
+    user.setPhoneNumber(request.phoneNumber());
     UserRole userRole = new UserRole();
     userRole.setCreatedAt(now);
     userRole.setLastUpdatedAt(now);
