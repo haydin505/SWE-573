@@ -7,16 +7,35 @@ https://dialecticsoftware.com/
 
 ## Table of Contents
 
+- [Set Environment Variables](#set-environment-variables)
 - [How to Build Project for Development?](#how-to-build-this-project-for-development)
 - [Local Dev Environment With Docker](#local-dev-environment-with-docker)
 - [Prod Environment](#prod-environment)
 
+<a name="set-environment-variables"></a>
+
+## Set Essential Environment Variables
+
+Mail credentials must be specified in operating system environment variables.
+
+You can give your custom mail or get
+production environment mail credentials from owner of the repository.
+
+Open your terminal end paste below code or paste it to `~/.bashrc`
+
+```
+export mail_username=
+export mail_password=
+```
+
 <a name="how-to-build-this-project-for-development"></a>
+
 ## How to Build Project for Development?
 
 You can use make or manual commands to build the application.`make` command can be installed via ``brew install make``
 
 ### Requirements
+
 * Docker and docker-compose
 * Java 17
 
@@ -69,6 +88,7 @@ Now you can access application with the following link:
 ---
 
 <a name="local-dev-environment-with-docker"></a>
+
 ## Local Dev Environment With Docker
 
 You can use this type of build process in order to test or examine the application.
@@ -84,11 +104,15 @@ docker-compose -f infrasave/docker-compose-local.yml start
 Now you can access application with the following link: http://localhost:3000
 
 <a name="prod-environment"></a>
+
 ## Prod Environment
+
 * Remove local images with following command
+
 ```
 docker-compose -f infrasave/docker-compose.yml down --remove-orphans --rmi all --volumes
 ```
+
 * You must set environment variables in your operations system for following properties
 
 - Please contact owner of the repository in order to get value of the below environment variables.
