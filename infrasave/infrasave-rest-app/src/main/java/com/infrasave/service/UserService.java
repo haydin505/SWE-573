@@ -86,7 +86,7 @@ public class UserService {
                     (f.getRequestee().getId().equals(currentUser.getId()) && f.getRequester()
                                                                               .getId()
                                                                               .equals(creatorUser.getId())) ||
-                    (f.getRequestee().getId().equals(creatorUser.getId()) || f.getRequester()
+                    (f.getRequestee().getId().equals(creatorUser.getId()) && f.getRequester()
                                                                               .getId()
                                                                               .equals(currentUser.getId())))
         .findFirst();
